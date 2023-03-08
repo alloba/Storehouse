@@ -1,19 +1,14 @@
 package file
 
-import java.lang.Exception
-import java.net.URI
-import java.net.URL
 import java.net.URLEncoder
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.DigestInputStream
 import java.security.MessageDigest
-import java.util.Base64
+import java.util.*
 import kotlin.io.path.extension
 import kotlin.io.path.fileSize
 import kotlin.io.path.nameWithoutExtension
-import kotlin.io.path.toPath
-import kotlin.streams.toList
 
 class VerifiedPath {
     lateinit var path: Path
