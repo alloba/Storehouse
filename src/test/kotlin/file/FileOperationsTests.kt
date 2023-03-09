@@ -50,8 +50,8 @@ class FileOperationsTests {
     fun getPopulatedFolderObject() {
         val tmpFolderPrefix = "storehousetest"
         val dir = Files.createTempDirectory(tmpFolderPrefix)
-        val f1 = Files.createTempFile(dir, "testFile1", "")
-        val f2 = Files.createTempFile(dir, "testFile2", "")
+        Files.createTempFile(dir, "testFile1", "")
+        Files.createTempFile(dir, "testFile2", "")
 
         val result = scanLocation(dir)
         assert(result is FolderInformation)
@@ -62,10 +62,10 @@ class FileOperationsTests {
     fun getNestedPopulatedFolderObject() {
         val tmpFolderPrefix = "storehousetest"
         val dir = Files.createTempDirectory(tmpFolderPrefix)
-        val f1 = Files.createTempFile(dir, "testFile1", "")
-        val f2 = Files.createTempFile(dir, "testFile2", "")
+        Files.createTempFile(dir, "testFile1", "")
+        Files.createTempFile(dir, "testFile2", "")
         val d1 = Files.createTempDirectory(dir, tmpFolderPrefix)
-        val d1f1 = Files.createTempFile(d1, "testFileD1F2", "")
+        Files.createTempFile(d1, "testFileD1F2", "")
 
         val result = scanLocation(dir)
         assert(result is FolderInformation)
