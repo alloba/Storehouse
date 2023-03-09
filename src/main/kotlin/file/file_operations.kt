@@ -10,24 +10,6 @@ import kotlin.io.path.extension
 import kotlin.io.path.fileSize
 import kotlin.io.path.nameWithoutExtension
 
-class VerifiedPath {
-    lateinit var path: Path
-
-    constructor (potentialPath: Path) {
-        if (Files.exists(potentialPath)) {
-            this.path = potentialPath
-        } else {
-            throw Exception("could not verify path: $path")
-        }
-    }
-
-    constructor(potentialPath: String) : this(potentialPath = Path.of(potentialPath))
-
-    override fun toString(): String {
-        return this.path.toString()
-    }
-}
-
 interface ByteObject {
     val name: String
     val byteSize: Long
@@ -46,24 +28,24 @@ data class FolderInformation(
     val children: List<ByteObject>
 ) : ByteObject
 
-fun scanLocation(path: VerifiedPath): List<ByteObject> {
+fun scanLocation(path: Path): List<ByteObject> {
     when {
-        Files.isDirectory(path.path) -> {
+        Files.isDirectory(path) -> {
             return resolveDirectory(path)
         }
 
-        Files.isRegularFile(path.path) -> {
+        Files.isRegularFile(path) -> {
             return listOf(
                 FileInformation(
-                    name = path.path.nameWithoutExtension,
-                    byteSize = path.path.fileSize(),
-                    extension = path.path.extension,
+                    name = path.nameWithoutExtension,
+                    byteSize = path.fileSize(),
+                    extension = path.extension,
                     hash = getFileHash(path)
                 )
             )
         }
 
-        Files.notExists(path.path) -> {
+        Files.notExists(path) -> {
             throw Exception("provided path does not resolve: $path")
         }
 
@@ -73,24 +55,24 @@ fun scanLocation(path: VerifiedPath): List<ByteObject> {
     }
 }
 
-fun resolveDirectory(path: VerifiedPath): List<ByteObject> {
+fun resolveDirectory(path: Path): List<ByteObject> {
     when {
-        Files.isRegularFile(path.path) -> {
+        Files.isRegularFile(path) -> {
             return listOf(
                 FileInformation(
-                    name = path.path.nameWithoutExtension,
-                    byteSize = path.path.fileSize(),
-                    extension = path.path.extension,
+                    name = path.nameWithoutExtension,
+                    byteSize = path.fileSize(),
+                    extension = path.extension,
                     hash = getFileHash(path)
                 )
             )
         }
 
-        Files.isDirectory(path.path) -> {
-            return Files.list(path.path).map { resolveDirectory(VerifiedPath(it)) }.toList().flatMap { it.toList() }
+        Files.isDirectory(path) -> {
+            return Files.list(path).map { resolveDirectory(it) }.toList().flatMap { it.toList() }
         }
 
-        Files.notExists(path.path) -> {
+        Files.notExists(path) -> {
             throw Exception("Unable to resolve subpath: $path")
         }
 
@@ -100,9 +82,9 @@ fun resolveDirectory(path: VerifiedPath): List<ByteObject> {
     }
 }
 
-fun getFileHash(path: VerifiedPath): String {
+fun getFileHash(path: Path): String {
     val md = MessageDigest.getInstance("SHA-256")
-    DigestInputStream(Files.newInputStream(path.path), md).use {
+    DigestInputStream(Files.newInputStream(path), md).use {
         it.readAllBytes()
     }
 

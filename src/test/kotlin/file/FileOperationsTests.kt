@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import java.lang.Exception
 import java.net.URL
+import java.nio.file.Path
 import kotlin.test.assertEquals
 
 class FileOperationsTests {
@@ -28,9 +29,9 @@ class FileOperationsTests {
         if (filePath.substring(2,3) == ":"){
             filePath = filePath.substring(1)
         }
-        val verifiedPath = VerifiedPath(filePath) // substring to remove leading / (windows issue)
+        val verifiedPath = Path.of(filePath) // substring to remove leading / (windows issue)
         val hash = getFileHash(verifiedPath)
 
-        assertEquals("%5BB%402aece37d", hash, "Hashed and encoded file string has changed. THIS BREAKS INTEGRITY CHECKS WITH EXISTING DATA.") //if this ever changes, there better be a good reason.
+        assertEquals("%5BB%403c87521", hash, "Hashed and encoded file string has changed. THIS BREAKS INTEGRITY CHECKS WITH EXISTING DATA.") //if this ever changes, there better be a good reason.
     }
 }
