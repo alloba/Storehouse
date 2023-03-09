@@ -3,7 +3,9 @@ create table if not exists archive
     id           text not null primary key unique,
     name         text not null,
     created_date text not null,
-    updated_date text not null
+    updated_date text not null,
+    deleted      int  not null,
+    deleted_date text
 );
 
 create table if not exists snapshot
@@ -11,7 +13,9 @@ create table if not exists snapshot
     id           text not null primary key unique,
     name         text not null,
     created_date text not null,
-    updated_date text not null
+    updated_date text not null,
+    deleted      int  not null,
+    deleted_date text
 );
 
 create table if not exists collection
@@ -19,7 +23,9 @@ create table if not exists collection
     id           text not null primary key unique,
     name         text not null,
     created_date text not null,
-    updated_date text not null
+    updated_date text not null,
+    deleted      int  not null,
+    deleted_date text
 );
 
 create table if not exists filemeta
@@ -29,7 +35,9 @@ create table if not exists filemeta
     extension    text not null,
     size_bytes   int  not null,
     created_date text not null,
-    updated_date text not null
+    updated_date text not null,
+    deleted      int  not null,
+    deleted_date text
 );
 
 create table if not exists fileraw
@@ -37,7 +45,9 @@ create table if not exists fileraw
     id           text not null primary key unique,
     hash         text not null,
     created_date text not null,
-    updated_date text not null
+    updated_date text not null,
+    deleted      int  not null,
+    deleted_date text
 );
 
 -------------------Junctions------------------------------
