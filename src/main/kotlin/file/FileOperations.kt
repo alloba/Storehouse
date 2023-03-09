@@ -36,11 +36,11 @@ fun scanLocation(path: Path): ByteObject {
 
         Files.isRegularFile(path) -> {
             return FileInformation(
-                    name = path.nameWithoutExtension,
-                    byteSize = path.fileSize(),
-                    extension = path.extension,
-                    hash = getFileHash(path)
-                )
+                name = path.nameWithoutExtension,
+                byteSize = path.fileSize(),
+                extension = path.extension,
+                hash = getFileHash(path)
+            )
 
         }
 
@@ -54,15 +54,15 @@ fun scanLocation(path: Path): ByteObject {
     }
 }
 
-fun resolveDirectory(path: Path): ByteObject {
+private fun resolveDirectory(path: Path): ByteObject {
     when {
         Files.isRegularFile(path) -> {
             return FileInformation(
-                    name = path.nameWithoutExtension,
-                    byteSize = path.fileSize(),
-                    extension = path.extension,
-                    hash = getFileHash(path)
-                )
+                name = path.nameWithoutExtension,
+                byteSize = path.fileSize(),
+                extension = path.extension,
+                hash = getFileHash(path)
+            )
         }
 
         Files.isDirectory(path) -> {
@@ -84,7 +84,7 @@ fun resolveDirectory(path: Path): ByteObject {
     }
 }
 
-fun getFileHash(path: Path): String {
+private fun getFileHash(path: Path): String {
     val md = MessageDigest.getInstance("SHA-256")
     DigestInputStream(Files.newInputStream(path), md).use {
         it.readAllBytes()
@@ -93,4 +93,3 @@ fun getFileHash(path: Path): String {
     val hash = Base64.getEncoder().encode(md.digest())
     return URLEncoder.encode(hash.toString(), "UTF-8")
 }
-
