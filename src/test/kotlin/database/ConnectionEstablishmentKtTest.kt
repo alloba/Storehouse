@@ -47,7 +47,7 @@ class ConnectionEstablishmentKtTest {
     @Test
     fun archiveInsert() {
         val statement = connection!!.createStatement()
-        statement.executeUpdate("insert into archive values ('0', 'test', 'blah', 'bluh')")
+        statement.executeUpdate("insert into archive values ('0', 'test', 'blah', 'bluh', 0, 'asdf')")
         val rs = statement.executeQuery("select * from archive")
         while (rs.next()) {
             println(rs.getInt("id"))
