@@ -28,21 +28,20 @@ data class FolderInformation(
     val children: List<ByteObject>
 ) : ByteObject
 
-fun scanLocation(path: Path): List<ByteObject> {
+fun scanLocation(path: Path): ByteObject {
     when {
         Files.isDirectory(path) -> {
             return resolveDirectory(path)
         }
 
         Files.isRegularFile(path) -> {
-            return listOf(
-                FileInformation(
+            return FileInformation(
                     name = path.nameWithoutExtension,
                     byteSize = path.fileSize(),
                     extension = path.extension,
                     hash = getFileHash(path)
                 )
-            )
+
         }
 
         Files.notExists(path) -> {
@@ -55,21 +54,24 @@ fun scanLocation(path: Path): List<ByteObject> {
     }
 }
 
-fun resolveDirectory(path: Path): List<ByteObject> {
+fun resolveDirectory(path: Path): ByteObject {
     when {
         Files.isRegularFile(path) -> {
-            return listOf(
-                FileInformation(
+            return FileInformation(
                     name = path.nameWithoutExtension,
                     byteSize = path.fileSize(),
                     extension = path.extension,
                     hash = getFileHash(path)
                 )
-            )
         }
 
         Files.isDirectory(path) -> {
-            return Files.list(path).map { resolveDirectory(it) }.toList().flatMap { it.toList() }
+            val children = Files.list(path).map { resolveDirectory(it) }.toList()
+            return FolderInformation(
+                name = path.nameWithoutExtension,
+                byteSize = path.fileSize(),
+                children = children
+            )
         }
 
         Files.notExists(path) -> {
