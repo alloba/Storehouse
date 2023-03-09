@@ -13,7 +13,7 @@ import java.sql.Statement
  * Trying out this style of in-memory database testing.
  * It's a little janky, so I don't necessarily expect it to survive, but we'll see.
  */
-class SqliteConnectionKtTest {
+class ConnectionKtTest {
 
     private var connection: Connection? = null
 
