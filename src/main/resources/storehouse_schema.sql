@@ -1,6 +1,6 @@
 create table if not exists archive
 (
-    id           TEXT not null primary key unique,
+    id           text not null primary key unique,
     name         text not null,
     created_date text not null,
     updated_date text not null
