@@ -7,13 +7,12 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import java.net.URL
 import java.sql.Connection
-import java.sql.Statement
 
 /**
  * Trying out this style of in-memory database testing.
  * It's a little janky, so I don't necessarily expect it to survive, but we'll see.
  */
-class ConnectionKtTest {
+class ConnectionEstablishmentKtTest {
 
     private var connection: Connection? = null
 
