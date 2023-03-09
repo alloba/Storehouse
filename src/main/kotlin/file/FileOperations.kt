@@ -84,7 +84,7 @@ private fun resolveDirectory(path: Path): ByteObject {
     }
 }
 
-private fun getFileHash(path: Path): String {
+fun getFileHash(path: Path): String {
     val md = MessageDigest.getInstance("SHA-256")
     DigestInputStream(Files.newInputStream(path), md).use {
         it.readAllBytes()
