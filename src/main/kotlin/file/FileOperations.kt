@@ -54,6 +54,16 @@ fun scanLocation(path: Path): ByteObject {
     }
 }
 
+fun getFileHash(path: Path): String {
+    val md = MessageDigest.getInstance("SHA-256")
+    DigestInputStream(Files.newInputStream(path), md).use {
+        it.readAllBytes()
+    }
+
+    val hash = Base64.getEncoder().encode(md.digest())
+    return URLEncoder.encode(hash.toString(), "UTF-8")
+}
+
 private fun resolveDirectory(path: Path): ByteObject {
     when {
         Files.isRegularFile(path) -> {
@@ -82,14 +92,4 @@ private fun resolveDirectory(path: Path): ByteObject {
             throw Exception("Unable to process path: $path")
         }
     }
-}
-
-fun getFileHash(path: Path): String {
-    val md = MessageDigest.getInstance("SHA-256")
-    DigestInputStream(Files.newInputStream(path), md).use {
-        it.readAllBytes()
-    }
-
-    val hash = Base64.getEncoder().encode(md.digest())
-    return URLEncoder.encode(hash.toString(), "UTF-8")
 }
