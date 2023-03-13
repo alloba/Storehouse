@@ -1,61 +1,53 @@
 package database
 
-import com.j256.ormlite.support.ConnectionSource
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import archive.ArchiveEntity
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
-import java.util.*
+import java.net.URL
+import java.sql.Connection
+import java.time.Instant
 import kotlin.test.assertEquals
 
 class ArchiveTest {
 
-    var connection: ConnectionSource? = null
-    var dao: DaoAccess? = null
-
-    @BeforeEach
-    fun before() {
-        connection = getSqliteConnection(":memory:")
-        dao = DaoAccess(connection!!)
-        dao!!.createTables()
-    }
-
-    @AfterEach
-    fun after() {
-        connection?.close()
-        connection = null
-        dao = null
-    }
-
     @Test
-    fun canInsertArchive() {
-        dao!!.archiveDao.create(
-            Archive(
-                id = "a",
-                name = "a",
-                createdDate = Date(),
-                updatedDate = Date(),
-                deleted = false,
-                deletedDate = null
+    fun archiveInsert() {
+        val connection = getSqliteConnection(":memory:")
+        connection.use {
+            createDatabase(connection)
+            val daoManager = DaoManager(connection)
+            val result = daoManager.archiveDao.insertArchive(
+                ArchiveEntity(
+                    id = "archiveInsert_test",
+                    name = "archive insert test",
+                    createdDate = Instant.now(),
+                    updatedDate = Instant.now(),
+                    deleted = false,
+                    deleteDate = Instant.MAX,
+                )
             )
-        )
+
+            assertEquals("archiveInsert_test", result.id)
+            assertEquals("archive insert test", result.name)
+        }
     }
 
-    @Test
-    fun canRetrieveArchive() {
-        dao!!.archiveDao.create(
-            Archive(
-                id = "canRetrieveArchive",
-                name = "canRetrieveArchive_name",
-                createdDate = Date(),
-                updatedDate = Date(),
-                deleted = false,
-                deletedDate = null
-            )
-        )
+    fun createDatabase(connection: Connection) {
+        val fileResource: URL = object {}.javaClass.getResource("/storehouse_schema.sql")
+            ?: fail("unable to load storehouse schema from resources")
 
-        val archive = dao!!.archiveDao.queryForId("canRetrieveArchive")?: fail("Unable to fetch archive")
-        assertEquals(archive.name, "canRetrieveArchive_name")
+        val rawSql = fileResource.readText()
+        val sqlStatements = rawSql.lines()
+            .filter { !it.startsWith("-") }
+            .joinToString(separator = " ")
+            .split(";")
+            .filter { it != "" }
+
+        sqlStatements.forEach {
+            val statement = connection.createStatement()
+            statement.execute(it)
+            statement.close()
+        }
     }
 }
 

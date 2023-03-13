@@ -1,6 +1,3 @@
-import database.DaoAccess
-import database.getSqliteConnection
-import input.CommandType
 import input.parseArgs
 
 
@@ -10,8 +7,8 @@ fun main(args: Array<String>) {
     println("understood commandline info:")
     println(argsContainer)
 
-    getSqliteConnection(argsContainer.databaseLocation).use {
-        val dao = DaoAccess(it)
-        CommandType.of(argsContainer.getCommand()).executor(argsContainer, dao)
-    }
+//    getSqliteConnection(argsContainer.databaseLocation).use {
+//        val dao = DaoAccess(it)
+//        CommandType.of(argsContainer.getCommand()).executor(argsContainer, dao)
+//    }
 }

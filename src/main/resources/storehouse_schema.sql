@@ -5,7 +5,7 @@ create table if not exists archive
     created_date text not null,
     updated_date text not null,
     deleted      int  not null,
-    deleted_date text
+    delete_date text
 );
 
 create table if not exists snapshot
@@ -15,7 +15,7 @@ create table if not exists snapshot
     created_date text not null,
     updated_date text not null,
     deleted      int  not null,
-    deleted_date text
+    delete_date text
 );
 
 create table if not exists collection
@@ -25,7 +25,7 @@ create table if not exists collection
     created_date text not null,
     updated_date text not null,
     deleted      int  not null,
-    deleted_date text
+    delete_date text
 );
 
 create table if not exists filemeta
@@ -37,7 +37,7 @@ create table if not exists filemeta
     created_date text not null,
     updated_date text not null,
     deleted      int  not null,
-    deleted_date text
+    delete_date text
 );
 
 create table if not exists fileraw
@@ -47,7 +47,7 @@ create table if not exists fileraw
     created_date text not null,
     updated_date text not null,
     deleted      int  not null,
-    deleted_date text
+    delete_date text
 );
 
 -------------------Junctions------------------------------

@@ -1,21 +1,23 @@
 package archive
 
-import database.DaoAccess
+import database.DaoManager
 import database.DataEntity
 import input.ArgumentsContainer
+import java.time.Instant
 import java.util.*
 
-fun createArchive(args: ArgumentsContainer, dao: DaoAccess): Collection<DataEntity> {
+fun createArchive(args: ArgumentsContainer, dao: DaoManager): Collection<DataEntity> {
     check(args.getInputs().size == 1)
+
     val uuid = UUID.randomUUID().toString()
     val newArchive = ArchiveEntity(
         id = uuid,
         name = args.getInputs()[0],
-        createdDate = Date(),
-        updatedDate = Date(),
+        createdDate = Instant.now(),
+        updatedDate = Instant.now(),
         deleted = false,
-        deletedDate = null
+        deleteDate = Instant.MAX
     )
-    dao.archiveDao.create(newArchive)
-    return listOf(dao.archiveDao.queryForId(uuid))
+
+    return emptyList()
 }
