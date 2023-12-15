@@ -1,0 +1,3 @@
+-- todo
+-- the goal is to kind of roll a small custom liquibase thing here. store the most recent schema that was executed, and then run everything newer in order on startup if needed.
+-- but fist i should plan out the schema again.

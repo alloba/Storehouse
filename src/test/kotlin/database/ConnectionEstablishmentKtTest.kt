@@ -1,16 +1,11 @@
 package database
 
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 
 class ConnectionEstablishmentKtTest {
     @Test
     fun testGetMemoryConnectionAndCreateTables() {
-//        val conn = getSqliteConnection(":memory:")
-//        val dsl = getDslContext(conn)
-//        conn.use {
-//            val dao = DaoAccess(it)
-//            dao.createTables()
-
-//        }
+        fail("behavior not implemented")
     }
 }
