@@ -28,17 +28,17 @@ class DatabaseConnectivityTests {
     @Test
     fun `able to create test database`(){
         val db = generateTestDatabaseFile()
-        val connection = getSqliteConnection(db.pathString)
+        val storehouseDb = StorehouseDatabase(db.pathString)
 
-        assertTrue(connection.isValid(1))
+        assertTrue(storehouseDb.connection.isValid(1))
     }
 
     @Test
     fun `able to close database connection`() {
         val db = generateTestDatabaseFile()
-        val connection = getSqliteConnection(db.pathString)
-        connection.close()
-        assertTrue (connection.isClosed)
+        val storehouseDb = StorehouseDatabase(db.pathString)
+        storehouseDb.connection.close()
+        assertTrue (storehouseDb.connection.isClosed)
     }
 
     private fun generateTestDatabaseFile(): Path {
