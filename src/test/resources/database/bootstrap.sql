@@ -2,8 +2,7 @@ create table if not exists SchemaMigration
 (
     id           text primary key,
     filename     text,
-    description  text,
-    dateExecuted text
+    date_executed text
 );
 
 create table if not exists bootstrap(
