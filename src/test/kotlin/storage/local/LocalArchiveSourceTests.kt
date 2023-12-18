@@ -3,6 +3,7 @@ package storage.local
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
@@ -60,5 +61,12 @@ class LocalArchiveSourceTests {
         assertEquals(localArchiveSource.computeMd5Hash(file1), localArchiveSource.computeMd5Hash(file2))
         assertEquals(localArchiveSource.computeMd5Hash(file3), localArchiveSource.computeMd5Hash(file4))
         assertNotEquals(localArchiveSource.computeMd5Hash(file1), localArchiveSource.computeMd5Hash(file4))
+    }
+
+    @Test
+    fun `file hash will not be computed if a path does not point to a regular file`(){
+        val localArchiveSource = LocalArchiveSource(LocalArchiveSourceConfig(Path.of(tempDirectoryPath)))
+        Path.of(tempDirectoryPath + File.separator + "tempfile.tmp").createFile()
+        assertThrows<Exception> { localArchiveSource.computeMd5Hash(Path.of(tempDirectoryPath)) }
     }
 }
