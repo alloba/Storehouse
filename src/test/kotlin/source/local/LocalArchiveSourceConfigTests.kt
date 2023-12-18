@@ -1,10 +1,10 @@
-package storage.local
+package source.local
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import storage.ArchiveSourceConfig
+import source.ArchiveSourceConfig
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createTempDirectory

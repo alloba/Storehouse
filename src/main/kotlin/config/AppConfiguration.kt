@@ -1,7 +1,7 @@
 package config
 
-import storage.ArchiveSource
-import storage.ArchiveSourceConfig
+import source.ArchiveSource
+import source.ArchiveSourceConfig
 import java.nio.file.Path
 
 data class AppConfiguration (

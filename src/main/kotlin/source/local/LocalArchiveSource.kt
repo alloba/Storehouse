@@ -1,6 +1,6 @@
-package storage.local
+package source.local
 
-import storage.ArchiveSource
+import source.ArchiveSource
 import java.nio.file.Path
 import java.security.MessageDigest
 import kotlin.io.path.isRegularFile

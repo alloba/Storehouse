@@ -1,6 +1,6 @@
-package storage.local
+package source.local
 
-import storage.ArchiveSourceConfig
+import source.ArchiveSourceConfig
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory

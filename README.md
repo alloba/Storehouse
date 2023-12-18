@@ -22,5 +22,5 @@ Hopefully a successor to my Librarian project.
 - fully configurable by external file, which can be stored with the archive if desired 
 - provide an interface that is easy to integrate with an external scheduler (make a nice CLI interface with sensible parameters)
 - ability to lock out other instances of the tool to prevent data corruption
-  - file storage systems provide file-level protections decently enough for my needs
+  - file source systems provide file-level protections decently enough for my needs
   - just need to prevent accidentally running multiple instances and mixing data 
