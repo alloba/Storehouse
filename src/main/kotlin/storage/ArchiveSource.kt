@@ -1,7 +1,6 @@
 package storage
 
 import java.nio.file.Path
-import java.nio.file.attribute.BasicFileAttributes
 
 /**
  * Generic interface for a file storage location.

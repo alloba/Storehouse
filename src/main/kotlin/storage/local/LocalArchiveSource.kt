@@ -14,9 +14,9 @@ class LocalArchiveSource(private val config: LocalArchiveSourceConfig): ArchiveS
             .toList()
     }
 
-    override fun computeMd5Hash(filepath: Path): String {
+    override fun computeMd5Hash(filePath: Path): String {
         return MessageDigest.getInstance("SHA-256")
-            .digest(filepath.readBytes())
+            .digest(filePath.readBytes())
             .fold(StringBuilder()) { sb, it -> sb.append( "%02x".format(it)) }.toString()
     }
 }
