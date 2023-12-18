@@ -14,12 +14,15 @@
     <properties>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
-        <kotlin.maven.version>1.8.10</kotlin.maven.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
-        <kotlin.stdlib.version>1.8.10</kotlin.stdlib.version>
+
+        <kotlin.master.version>1.9.10</kotlin.master.version>
+        <kotlin.maven.version>${kotlin.master.version}</kotlin.maven.version>
+        <kotlin.stdlib.version>${kotlin.master.version}</kotlin.stdlib.version>
+        <kotlin.junit.version>${kotlin.master.version}</kotlin.junit.version>
 
         <maven.compiler.version>3.11.0</maven.compiler.version>
         <maven.surefire.version>2.22.2</maven.surefire.version>
@@ -30,7 +33,6 @@
         <jakarta.persistence.version>3.1.0</jakarta.persistence.version>
         <xerial.sqlite.version>3.44.1.0</xerial.sqlite.version>
         <junit.version>5.9.2</junit.version>
-        <kotlin.junit.version>1.8.10</kotlin.junit.version>
 
         <logback.version>1.4.14</logback.version>
         <slf4j.version>2.0.9</slf4j.version>
