@@ -14,9 +14,10 @@ import kotlin.io.path.readText
 
 
 class StorehouseDatabase(private val databasePath: String) {
-    private val LOGGER = LoggerFactory.getLogger(this::class.java)
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     private val databaseSchemaFolder = "database"
-    private val databaseMigrationPrefix = "db-process-"
+    private val migrationScriptPrefix = "-"  // splits on the last occurrence. asdf-123 -> 123; bd-test-script-3 -> 3; etc.
     private val bootstrapFile = "bootstrap.sql"
 
     val connection: Connection
@@ -47,14 +48,14 @@ class StorehouseDatabase(private val databasePath: String) {
 
         val allMigrationResources = Path.of(migrationDirectory)
             .listDirectoryEntries()
-            .filter { it.name.startsWith(databaseMigrationPrefix) }
-            .sortedBy { it.name.substringAfterLast(databaseMigrationPrefix).toInt() }
+            .filter { it.name.contains(migrationScriptPrefix) && it.name.endsWith(".sql") }
+            .sortedBy { it.name.substringAfterLast(migrationScriptPrefix).toInt() }
 
         val completedMigrations = getSchemaMigrations(this)
         val targetMigrationResources = allMigrationResources.filter { ! completedMigrations.map { c -> c.filename }.contains(it.name) }
 
         if (targetMigrationResources.isNotEmpty()) {
-            LOGGER.info("Database is out of date! Attempting migrations: ${targetMigrationResources.map { it.name }}")
+            logger.info("Database is out of date! Attempting migrations: ${targetMigrationResources.map { it.name }}")
             targetMigrationResources.forEach {
                 executeSqlScript(it.readText())
                 insertSchemaMigration(this, SchemaMigrationEntity(UUID.randomUUID().toString(), it.fileName.toString(), OffsetDateTime.now()))
@@ -69,7 +70,7 @@ class StorehouseDatabase(private val databasePath: String) {
             this::connection.get().prepareStatement("select 1 from ${DatabaseConstants.BOOTSTRAP_TABLE}")
         } catch (e: SQLiteException){
             if (e.message?.contains("no such table: bootstrap") == true){
-                LOGGER.info("Database at [$databasePath] not marked as initialized, running bootstrap file - $bootstrapFile")
+                logger.info("Database at [$databasePath] not marked as initialized, running bootstrap file - $bootstrapFile")
                 val bootstrapText = this::class.java.classLoader.getResource("$databaseSchemaFolder/$bootstrapFile")?.readText()
                     ?: throw Exception("Unable to load database bootstrap file - $bootstrapFile")
 
@@ -90,7 +91,7 @@ class StorehouseDatabase(private val databasePath: String) {
             .split(delimiter)
             .filter { it.isNotEmpty() }
             .forEach {
-                LOGGER.info("Executing statement: \n\t$it")
+                logger.info("Executing statement:  \t$it")
                 this::connection.get().prepareStatement(it).execute()
             }
     }
