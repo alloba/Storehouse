@@ -89,7 +89,7 @@ class StorehouseDatabase(private val databasePath: String) {
             .filter { ! it.startsWith(commentMarker) }
             .joinToString(" ")
             .split(delimiter)
-            .filter { it.isNotEmpty() }
+            .filter { it.isNotBlank() }
             .forEach {
                 logger.info("Executing statement:  \t$it")
                 this::connection.get().prepareStatement(it).execute()
