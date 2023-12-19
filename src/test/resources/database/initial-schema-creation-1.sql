@@ -12,6 +12,7 @@ create table if not exists Snapshot(
     date_created text,
     date_updated text,
 
+    description text,
     archive_id text,
     foreign key (archive_id) references Archive(id)
 );
