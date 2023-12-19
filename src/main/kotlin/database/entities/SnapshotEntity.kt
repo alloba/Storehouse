@@ -20,7 +20,6 @@ data class SnapshotEntity(
                 description = rs.getString("description"),
                 archiveId = rs.getString("archive_id"),
             )
-
         }
     }
 }

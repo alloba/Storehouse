@@ -5,7 +5,7 @@ import toDb
 import java.time.OffsetDateTime
 
 class ArchiveRepository(private val database: StorehouseDatabase) {
-    fun insertArchiveEntity(archiveEntity: ArchiveEntity): ArchiveEntity{
+    fun insertArchiveEntity(archiveEntity: ArchiveEntity): ArchiveEntity {
         val timestampEntity = archiveEntity.copy(dateCreated = OffsetDateTime.now(), dateUpdated = OffsetDateTime.now())
         val statement = database.connection.prepareStatement("insert into $ARCHIVE_TABLE ($ARCHIVE_TABLE_FIELDS) values (?, ?, ?, ?, ?)")
         statement.setString(1, timestampEntity.id)
@@ -23,7 +23,7 @@ class ArchiveRepository(private val database: StorehouseDatabase) {
         statement.setString(1, id)
         val rs = statement.executeQuery()
 
-        return if (! rs.next()) null
+        return if (!rs.next()) null
         else ArchiveEntity.fromResultSet(rs)
     }
 
@@ -32,7 +32,7 @@ class ArchiveRepository(private val database: StorehouseDatabase) {
         val rs = statement.executeQuery()
 
         val res = mutableListOf<ArchiveEntity>()
-        while (rs.next()){
+        while (rs.next()) {
             res.add(ArchiveEntity.fromResultSet(rs))
         }
         return res.toList()

@@ -11,7 +11,7 @@ data class ArchiveEntity(
     val description: String
 ) {
     companion object {
-        fun fromResultSet(rs: ResultSet): ArchiveEntity{
+        fun fromResultSet(rs: ResultSet): ArchiveEntity {
             return ArchiveEntity(
                 id = rs.getString("id"),
                 dateCreated = OffsetDateTime.parse(rs.getString("date_created")),

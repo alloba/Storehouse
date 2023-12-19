@@ -4,10 +4,10 @@ import destination.ArchiveDestination
 import java.nio.file.Path
 import kotlin.io.path.copyTo
 
-class LocalArchiveDestination(private val config: LocalArchiveDestinationConfig): ArchiveDestination(config) {
+class LocalArchiveDestination(private val config: LocalArchiveDestinationConfig) : ArchiveDestination(config) {
     override fun copyFile(sourceFilePath: Path, rootParentPath: Path): Boolean {
-        if (! sourceFilePath.startsWith(rootParentPath)){
-            throw Exception ("Local archive - cannot copy file - target source [$sourceFilePath] is not a child of [$rootParentPath]")
+        if (!sourceFilePath.startsWith(rootParentPath)) {
+            throw Exception("Local archive - cannot copy file - target source [$sourceFilePath] is not a child of [$rootParentPath]")
         }
 
         val relativePath = rootParentPath.relativize(sourceFilePath)

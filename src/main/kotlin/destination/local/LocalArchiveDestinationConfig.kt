@@ -5,17 +5,17 @@ import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
 
-class LocalArchiveDestinationConfig(val rootPath: Path): ArchiveDestinationConfig(mapOf("rootPath" to rootPath)) {
+class LocalArchiveDestinationConfig(val rootPath: Path) : ArchiveDestinationConfig(mapOf("rootPath" to rootPath)) {
     init {
         val errors = mutableListOf<String>()
-        if (! rootPath.exists()){
+        if (!rootPath.exists()) {
             errors.add("Local archive destination root path [$rootPath] does not exist")
         }
-        if (! rootPath.isDirectory()){
+        if (!rootPath.isDirectory()) {
             errors.add("Local archive destination root path [$rootPath] is not a directory.")
         }
 
-        if (errors.isNotEmpty()){
+        if (errors.isNotEmpty()) {
             throw ArchiveDestinationConfigError(*errors.toTypedArray())
         }
     }

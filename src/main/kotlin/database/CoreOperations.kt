@@ -8,7 +8,7 @@ fun getSchemaMigrations(database: StorehouseDatabase): List<SchemaMigrationEntit
     val rs = database.connection.prepareStatement(query).executeQuery()
 
     val found = mutableListOf<SchemaMigrationEntity>()
-    while (rs.next()){
+    while (rs.next()) {
         found.add(SchemaMigrationEntity.fromResultSet(rs))
     }
 

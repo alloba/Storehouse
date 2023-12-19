@@ -3,8 +3,8 @@ package database.entities
 import java.sql.ResultSet
 import java.time.OffsetDateTime
 
-data class SchemaMigrationEntity (val id: String, val filename: String, val dateExecuted: OffsetDateTime){
-    companion object{
+data class SchemaMigrationEntity(val id: String, val filename: String, val dateExecuted: OffsetDateTime) {
+    companion object {
         fun fromResultSet(rs: ResultSet): SchemaMigrationEntity {
             return SchemaMigrationEntity(
                 id = rs.getString("id"),
