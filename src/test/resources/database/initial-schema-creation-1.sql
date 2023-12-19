@@ -21,24 +21,19 @@ create table if not exists FileMeta(
     date_created text,
     date_updated text,
 
-    archive_id text,
-    foreign key (archive_id) references Archive(id)
-
-);
-
-create table if not exists ArchiveFileMeta (
-    archive_id text,
-    filemeta_id text,
-
-    foreign key (archive_id) references Archive(id),
-    foreign key (filemeta_id) references FileMeta(id),
-    primary key (archive_id, filemeta_id)
-);
-
-create table if not exists SnapshotFileMeta(
+    snapshot_path text,
     snapshot_id text,
-    filemeta_id text,
     foreign key (snapshot_id) references Snapshot(id),
-    foreign key (filemeta_id) references FileMeta(id),
-    primary key (snapshot_id, filemeta_id)
+    file_id text,
+    foreign key (file_id) references File(id)
+);
+
+create table if not exists File(
+    id text primary key,
+    date_created text,
+    date_updated text,
+
+    name text,
+    file_extension text,
+    md5_hash text
 );
