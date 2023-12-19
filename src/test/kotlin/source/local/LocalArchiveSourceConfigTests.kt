@@ -31,14 +31,14 @@ class LocalArchiveSourceConfigTests {
 
     @Test
     fun `if config directory does not exist then fail`(){
-        assertThrows<ArchiveSourceConfig.StorageValidationException> {
+        assertThrows<ArchiveSourceConfig.ArchiveSourceConfigError> {
             LocalArchiveSourceConfig(Path.of(testDirectoryName+ "junkextrabit"))
         }
     }
 
     @Test
     fun `if config path is not a directory then fail`(){
-        assertThrows<ArchiveSourceConfig.StorageValidationException> {
+        assertThrows<ArchiveSourceConfig.ArchiveSourceConfigError> {
             LocalArchiveSourceConfig(kotlin.io.path.createTempFile(Path.of(testDirectoryName), "localstorage-test-file"))
         }
     }

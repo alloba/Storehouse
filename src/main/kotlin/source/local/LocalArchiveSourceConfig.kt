@@ -16,7 +16,7 @@ class LocalArchiveSourceConfig(val filepath: Path): ArchiveSourceConfig(mapOf("f
         }
 
         if (errors.isNotEmpty()){
-            throw StorageValidationException(*errors.toTypedArray())
+            throw ArchiveSourceConfigError(*errors.toTypedArray())
         }
     }
 }
