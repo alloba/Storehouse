@@ -2,3 +2,5 @@
 target
 db
 *.class
+
+identifier.sqlite
