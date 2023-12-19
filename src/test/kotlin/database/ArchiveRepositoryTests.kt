@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.fail
 import java.nio.file.Path
 import java.time.OffsetDateTime
 import java.util.*
@@ -46,10 +47,10 @@ class ArchiveRepositoryTests {
         val archiverepo = ArchiveRepository(database!!)
         val archive = ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "name", "description")
 
-        archiverepo.insertArchiveEntity(archive)
-        val result = archiverepo.getArchiveEntity(archive.id)
+        val saved = archiverepo.insertArchiveEntity(archive)
+        val result = archiverepo.getArchiveEntity(archive.id) ?: fail("failed to retrieve archive entity")
 
-        assertEquals(archive, result)
+        assertEquals(saved, result)
     }
 
     @Test
@@ -82,13 +83,13 @@ class ArchiveRepositoryTests {
         val archive1 = ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "name", "desc")
         val archive2 = ArchiveEntity(archive1.id, OffsetDateTime.MAX, OffsetDateTime.MIN, "name2", "desc2")
 
-        archiveRepository.insertArchiveEntity(archive1)
+        val saved1 = archiveRepository.insertArchiveEntity(archive1)
         val res1 = archiveRepository.getArchiveEntity(archive1.id)
-        assertEquals(archive1, res1)
+        assertEquals(saved1, res1)
 
-        archiveRepository.updateArchiveEntity(archive2)
+        val saved2 = archiveRepository.updateArchiveEntity(archive2)
         val res2 = archiveRepository.getArchiveEntity(archive1.id)
-        assertEquals(archive2, res2)
+        assertEquals(saved2, res2)
         assertNotEquals(res1, res2)
     }
 

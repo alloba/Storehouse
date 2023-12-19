@@ -2,17 +2,19 @@ package database
 
 import database.entities.ArchiveEntity
 import toDb
+import java.time.OffsetDateTime
 
 class ArchiveRepository(private val database: StorehouseDatabase) {
     fun insertArchiveEntity(archiveEntity: ArchiveEntity): ArchiveEntity{
+        val timestampEntity = archiveEntity.copy(dateCreated = OffsetDateTime.now(), dateUpdated = OffsetDateTime.now())
         val statement = database.connection.prepareStatement("insert into $ARCHIVE_TABLE ($ARCHIVE_TABLE_FIELDS) values (?, ?, ?, ?, ?)")
-        statement.setString(1, archiveEntity.id)
-        statement.setString(2, archiveEntity.dateCreated.toDb())
-        statement.setString(3, archiveEntity.dateUpdated.toDb())
-        statement.setString(4, archiveEntity.name)
-        statement.setString(5, archiveEntity.description)
+        statement.setString(1, timestampEntity.id)
+        statement.setString(2, timestampEntity.dateCreated.toDb())
+        statement.setString(3, timestampEntity.dateUpdated.toDb())
+        statement.setString(4, timestampEntity.name)
+        statement.setString(5, timestampEntity.description)
         statement.execute()
-        return archiveEntity
+        return timestampEntity
     }
 
     fun getArchiveEntity(id: String): ArchiveEntity? {
@@ -38,14 +40,15 @@ class ArchiveRepository(private val database: StorehouseDatabase) {
 
     fun updateArchiveEntity(archiveEntity: ArchiveEntity): ArchiveEntity {
         val statement = database.connection.prepareStatement("update $ARCHIVE_TABLE set $ARCHIVE_TABLE_UPDATE_FIELDS where id = ?")
-        statement.setString(1, archiveEntity.dateCreated.toDb())
-        statement.setString(2, archiveEntity.dateUpdated.toDb())
-        statement.setString(3, archiveEntity.name)
-        statement.setString(4, archiveEntity.description)
-        statement.setString(5, archiveEntity.id)
+        val timestampEntity = archiveEntity.copy(dateUpdated = OffsetDateTime.now())
+        statement.setString(1, timestampEntity.dateCreated.toDb())
+        statement.setString(2, timestampEntity.dateUpdated.toDb())
+        statement.setString(3, timestampEntity.name)
+        statement.setString(4, timestampEntity.description)
+        statement.setString(5, timestampEntity.id)
         val res = statement.executeUpdate()
 
-        return if (res != 0) archiveEntity else throw Exception("Failed to update ArchiveEntity: $archiveEntity")
+        return if (res != 0) timestampEntity else throw Exception("Failed to update ArchiveEntity: $archiveEntity")
     }
 
     companion object {
