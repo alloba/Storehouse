@@ -67,7 +67,7 @@ class StorehouseDatabase(private val databasePath: String) {
 
     private fun bootstrapDatabase() {
         try{
-            this::connection.get().prepareStatement("select 1 from ${DatabaseConstants.BOOTSTRAP_TABLE}")
+            this::connection.get().prepareStatement("select 1 from bootstrap")
         } catch (e: SQLiteException){
             if (e.message?.contains("no such table: bootstrap") == true){
                 logger.info("Database at [$databasePath] not marked as initialized, running bootstrap file - $bootstrapFile")
