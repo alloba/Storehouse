@@ -9,7 +9,6 @@ data class SnapshotEntity(
     val dateUpdated: OffsetDateTime,
     val description: String,
     val archiveId: String,
-
     ) {
     companion object {
         fun fromResultSet(rs: ResultSet): SnapshotEntity {

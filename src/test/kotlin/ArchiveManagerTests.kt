@@ -1,4 +1,5 @@
 import database.ArchiveRepository
+import database.SnapshotRepository
 import database.StorehouseDatabase
 import database.entities.ArchiveEntity
 import destination.local.LocalArchiveDestination
@@ -33,7 +34,8 @@ class ArchiveManagerTests {
         val archiveManager = ArchiveManager(
             testHarness.localArchiveSource,
             testHarness.localArchiveDestination,
-            ArchiveRepository(testHarness.database)
+            ArchiveRepository(testHarness.database),
+            SnapshotRepository(testHarness.database)
         )
 
         val newArchive = archiveManager.createNewArchive("testArchive", "its an archive")
@@ -46,7 +48,8 @@ class ArchiveManagerTests {
         val archiveManager = ArchiveManager(
             testHarness.localArchiveSource,
             testHarness.localArchiveDestination,
-            ArchiveRepository(testHarness.database)
+            ArchiveRepository(testHarness.database),
+            SnapshotRepository(testHarness.database)
         )
         val archive = archiveManager.createNewArchive("testyArchie", "es test")
 
@@ -60,9 +63,22 @@ class ArchiveManagerTests {
         val archiveManager = ArchiveManager(
             testHarness.localArchiveSource,
             testHarness.localArchiveDestination,
-            ArchiveRepository(testHarness.database)
+            ArchiveRepository(testHarness.database),
+            SnapshotRepository(testHarness.database)
         )
 
         assertThrows<Exception> { archiveManager.getArchiveByName("doesnt exist") }
+    }
+
+    @Test
+    fun `can create snapshot`(){
+        val archiveManager = ArchiveManager(
+            testHarness.localArchiveSource,
+            testHarness.localArchiveDestination,
+            ArchiveRepository(testHarness.database),
+            SnapshotRepository(testHarness.database)
+        )
+        val archive = archiveManager.createNewArchive("test archive", "archive desc")
+        val snapshot = archiveManager.createNewSnapshot(archive, emptyList())
     }
 }

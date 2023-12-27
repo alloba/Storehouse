@@ -1,8 +1,11 @@
 import database.ArchiveRepository
+import database.SnapshotRepository
 import database.StorehouseDatabase
 import database.entities.ArchiveEntity
+import database.entities.FileMetaEntity
 import database.entities.SnapshotEntity
 import destination.local.LocalArchiveDestination
+import org.slf4j.LoggerFactory
 import source.ArchiveSource
 import java.nio.file.Path
 import java.time.OffsetDateTime
@@ -12,8 +15,11 @@ class ArchiveManager(
     val source: ArchiveSource,
     val destination: LocalArchiveDestination,
     val archiveRepository: ArchiveRepository,
+    val snapshotRepository: SnapshotRepository
 ) {
+    private val logger = LoggerFactory.getLogger(this::class.java)
     fun createNewArchive(archiveName: String, archiveDescription: String): ArchiveEntity {
+        logger.info("Creating new archive with name: $archiveName")
         return archiveRepository.insertArchiveEntity(
             ArchiveEntity(
                 UUID.randomUUID().toString(),
@@ -28,11 +34,16 @@ class ArchiveManager(
         return archiveRepository.getArchiveEntityByName(archiveName) ?: throw Exception("Archive with name [$archiveName] not found.")
     }
 
-    fun createNewSnapshot(archive: ArchiveEntity): SnapshotEntity {
-        TODO()
+    fun createNewSnapshot(archive: ArchiveEntity, files: List<Path>, description: String = ""): SnapshotEntity {
+        val snapshotEntity = snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), description, archive.id))
+
+        logger.info("Submitting ${files.size} files for Archive: ${archive.name} - Snapshot: ${snapshotEntity.id}")
+        val fileMetas = submitToSnapshot(snapshotEntity, files)
+
+        return snapshotEntity
     }
 
-    fun submitToSnapshot(snapshot: SnapshotEntity, pathObjects: List<Path>) {
+    private fun submitToSnapshot(snapshot: SnapshotEntity, pathObjects: List<Path>): List<FileMetaEntity> {
         TODO()
     }
 
