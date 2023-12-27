@@ -1,4 +1,5 @@
 import database.repo.ArchiveRepository
+import database.repo.FileMetaRepository
 import database.repo.FileRepository
 import database.repo.SnapshotRepository
 import org.junit.jupiter.api.AfterEach
@@ -59,7 +60,8 @@ class ArchiveManagerTests {
             testHarness.localArchiveDestination,
             ArchiveRepository(testHarness.database),
             SnapshotRepository(testHarness.database),
-            FileRepository(testHarness.database)
+            FileRepository(testHarness.database),
+            FileMetaRepository(testHarness.database)
         )
     }
 }

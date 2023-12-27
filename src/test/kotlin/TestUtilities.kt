@@ -1,5 +1,6 @@
 import database.StorehouseDatabase
 import database.repo.ArchiveRepository
+import database.repo.FileMetaRepository
 import database.repo.FileRepository
 import database.repo.SnapshotRepository
 import destination.local.LocalArchiveDestination
@@ -31,7 +32,8 @@ class TestHarness {
             destination = localArchiveDestination,
             archiveRepository = ArchiveRepository(database),
             snapshotRepository = SnapshotRepository(database),
-            fileRepository = FileRepository(database)
+            fileRepository = FileRepository(database),
+            fileMetaRepository = FileMetaRepository(database)
         )
     }
 
