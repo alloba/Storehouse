@@ -8,6 +8,8 @@ data class FileMetaEntity(
     val dateCreated: OffsetDateTime,
     val dateUpdated: OffsetDateTime,
     val snapshotPath: String,
+    val name: String,
+    val fileExtension: String,
     val fileId: String,
     val snapshotId: String
 ) {
@@ -17,7 +19,9 @@ data class FileMetaEntity(
                 id = rs.getString("id"),
                 dateCreated = OffsetDateTime.parse(rs.getString("date_created")),
                 dateUpdated = OffsetDateTime.parse(rs.getString("date_updated")),
-                snapshotPath = rs.getString("snapshot_path"),
+                snapshotPath = rs.getString("original_path"),
+                name = rs.getString("name"),
+                fileExtension = rs.getString("file_extension"),
                 fileId = rs.getString("file_id"),
                 snapshotId = rs.getString("snapshot_id")
             )

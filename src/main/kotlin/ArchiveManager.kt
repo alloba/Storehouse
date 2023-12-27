@@ -64,6 +64,8 @@ class ArchiveManager(
                         OffsetDateTime.now(),
                         OffsetDateTime.now(),
                         file.pathString,
+                        file.name,
+                        file.extension,
                         existingFileId,
                         snapshot.id)
                 ).let { filemetas.add(it) }
@@ -74,8 +76,6 @@ class ArchiveManager(
                         UUID.randomUUID().toString(),
                         OffsetDateTime.now(),
                         OffsetDateTime.now(),
-                        file.name,
-                        file.extension,
                         hash)
                 )
                 fileMetaRepository.insertFileMeta(
@@ -84,6 +84,8 @@ class ArchiveManager(
                         OffsetDateTime.now(),
                         OffsetDateTime.now(),
                         file.pathString,
+                        file.name,
+                        file.extension,
                         fileEntity.id,
                         snapshot.id)
                 ).let { filemetas.add(it) }

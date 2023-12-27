@@ -27,20 +27,18 @@ class FileRepositoryTests {
 
     @Test
     fun `can create file in db`(){
-        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "filename", "fileextension", "hash")
+        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "hash")
         val fileRepository = FileRepository(testHarness.database)
         val output = fileRepository.insertFileEntity(input)
 
         assertEquals(input.id, output.id)
-        assertEquals(input.name, output.name)
-        assertEquals(input.fileExtension, output.fileExtension)
         assertEquals(input.md5Hash, output.md5Hash)
         assertNotEquals(input.dateCreated, output.dateCreated)
     }
 
     @Test
     fun `can retrieve file by id`(){
-        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "filename", "fileextension", "hash")
+        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "hash")
         val fileRepository = FileRepository(testHarness.database)
         val saved = fileRepository.insertFileEntity(input)
         val result = fileRepository.getFileEntityById(input.id)
@@ -50,7 +48,7 @@ class FileRepositoryTests {
 
     @Test
     fun `can retrieve file by hash`(){
-        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "filename", "fileextension", "hash")
+        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(),  "hash")
         val fileRepository = FileRepository(testHarness.database)
         val saved = fileRepository.insertFileEntity(input)
         val result = fileRepository.getFileEntityByMd5Hash(saved.md5Hash)!!
