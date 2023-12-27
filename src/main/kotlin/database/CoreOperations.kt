@@ -31,8 +31,3 @@ fun pingBootstrap(database: StorehouseDatabase): Boolean {
     database.connection.prepareStatement(query).executeQuery()
     return true
 }
-
-//object {
-//    const val BOOTSTRAP_TABLE = "bootstrap"
-//    const val SCHEMA_MIGRATION_TABLE = "SchemaMigration"
-//}
