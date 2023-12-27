@@ -7,4 +7,6 @@ create table if not exists SchemaMigration
 
 create table if not exists bootstrap(
     exist text primary key
-)
+);
+
+PRAGMA foreign_keys = ON;
