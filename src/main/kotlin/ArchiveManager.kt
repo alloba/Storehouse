@@ -70,7 +70,7 @@ class ArchiveManager(
                         snapshot.id)
                 ).let { filemetas.add(it) }
             } else {
-                destination.copyFile(file)
+                destination.copyFile(file, hash)
                 val fileEntity = fileRepository.insertFileEntity(
                     FileEntity(
                         UUID.randomUUID().toString(),

@@ -36,7 +36,7 @@ class LocalArchiveDestinationTests {
         val otherFile = kotlin.io.path.createTempFile(otherDir, "testfile-zzz")
 
         assertTrue(destination.listFiles().isEmpty())
-        destination.copyFile(otherFile)
+        destination.copyFile(otherFile, "asdfffff")
 
         assertTrue(destination.listFiles().size == 1)
     }
