@@ -64,4 +64,32 @@ class SnapshotEntityTests {
         snapshotRepository.insertSnapshotEntity(snapshotInput1)
         snapshotRepository.insertSnapshotEntity(snapshotInput2)
     }
+
+    @Test
+    fun `cannot update snapshot that does not exist`(){
+        val snapshotRepository = SnapshotRepository(harness.database)
+        val archiveRepository = ArchiveRepository(harness.database)
+        val archiveInput = ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "", "")
+        val archiveOutput = archiveRepository.insertArchiveEntity(archiveInput)
+        val snapshotInput = SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "snapdesc", archiveInput.id)
+
+        assertThrows<Exception> { snapshotRepository.updateSnapshotEntity(snapshotInput) }
+    }
+
+    @Test
+    fun `can update existing snapshot`() {
+        val snapshotRepository = SnapshotRepository(harness.database)
+        val archiveRepository = ArchiveRepository(harness.database)
+        val archiveInput = ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "", "")
+        val archiveOutput = archiveRepository.insertArchiveEntity(archiveInput)
+        val snapshotInput = SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "snapdesc", archiveInput.id)
+        snapshotRepository.insertSnapshotEntity(snapshotInput)
+
+        val result = snapshotRepository.updateSnapshotEntity(snapshotInput.copy(description = "changed description"))
+        assertEquals(snapshotInput.id, result.id)
+        assertEquals(snapshotInput.archiveId, result.archiveId)
+        assertEquals(snapshotInput.dateCreated, result.dateCreated)
+        assertEquals("changed description", result.description)
+        assertNotEquals(snapshotInput.dateUpdated, result.dateUpdated)
+    }
 }

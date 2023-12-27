@@ -28,9 +28,26 @@ class SnapshotRepository(private val database: StorehouseDatabase) {
         else SnapshotEntity.fromResultSet(rs)
     }
 
+    fun updateSnapshotEntity(snapshot: SnapshotEntity): SnapshotEntity {
+        val statement = database.connection.prepareStatement("update $SNAPSHOT_TABLE set $SNAPSHOT_TABLE_UPDATE_FIELDS where id = ?")
+        val updateEntity = snapshot.copy(dateUpdated = OffsetDateTime.now())
+        statement.setString(1, updateEntity.dateCreated.toDb())
+        statement.setString(2, updateEntity.dateUpdated.toDb())
+        statement.setString(3, updateEntity.description)
+        statement.setString(4, updateEntity.archiveId)
+
+        statement.setString(5, snapshot.id)
+
+        val res = statement.executeUpdate()
+
+        return if (res != 0) updateEntity
+        else throw Exception("Failed to update snapshot entity: [${snapshot.id} ${snapshot.description}]")
+    }
+
     companion object {
         const val SNAPSHOT_TABLE = "Snapshot"
         const val SNAPSHOT_TABLE_FIELDS = " id, date_created, date_updated, description, archive_id "
         const val SNAPSHOT_TABLE_FIELDS_INSERTS = " ?, ?, ?, ?, ? "
+        const val SNAPSHOT_TABLE_UPDATE_FIELDS = " date_created = ?, date_updated = ?, description = ?, archive_id = ? "
     }
 }
