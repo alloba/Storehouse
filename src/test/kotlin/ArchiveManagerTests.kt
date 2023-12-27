@@ -20,7 +20,7 @@ class ArchiveManagerTests {
    val testHarness = TestHarness()
     @BeforeEach
     fun before(){
-
+        testHarness.before()
     }
 
     @AfterEach
