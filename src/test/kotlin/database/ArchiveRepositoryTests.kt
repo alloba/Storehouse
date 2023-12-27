@@ -65,20 +65,21 @@ class ArchiveRepositoryTests {
     }
 
     @Test
-    fun `if no archive found return null`(){
+    fun `if no archive found return null`() {
         val archiveRepository = ArchiveRepository(database!!)
         val res = archiveRepository.getArchiveEntity("doesnt exist")
         assertTrue(res == null)
     }
+
     @Test
-    fun `if no archives fetch all returns empty list`(){
+    fun `if no archives fetch all returns empty list`() {
         val archiveRepository = ArchiveRepository(database!!)
         val res = archiveRepository.getAllArchiveEntities()
         assertTrue(res.isEmpty())
     }
 
     @Test
-    fun `can update archive`(){
+    fun `can update archive`() {
         val archiveRepository = ArchiveRepository(database!!)
         val archive1 = ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "name", "desc")
         val archive2 = ArchiveEntity(archive1.id, OffsetDateTime.MAX, OffsetDateTime.MIN, "name2", "desc2")

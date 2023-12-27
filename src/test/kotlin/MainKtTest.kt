@@ -3,7 +3,7 @@ import kotlin.test.assertEquals
 
 class MainKtTest {
     @Test
-    fun placeholderTest(){
-        assertEquals(1,1)
+    fun placeholderTest() {
+        assertEquals(1, 1)
     }
 }

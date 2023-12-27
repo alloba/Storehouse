@@ -13,14 +13,15 @@ import kotlin.io.path.deleteRecursively
 class LocalArchiveSourceConfigTests {
 
     private var testDirectoryName = ""
+
     @BeforeEach
-    fun before(){
+    fun before() {
         testDirectoryName = createTempDirectory("storehouse-testing").toString()
     }
 
     @OptIn(ExperimentalPathApi::class)
     @AfterEach
-    fun after(){
+    fun after() {
         Path.of(testDirectoryName).deleteRecursively()
     }
 
@@ -30,14 +31,14 @@ class LocalArchiveSourceConfigTests {
     }
 
     @Test
-    fun `if config directory does not exist then fail`(){
+    fun `if config directory does not exist then fail`() {
         assertThrows<ArchiveSourceConfig.ArchiveSourceConfigError> {
-            LocalArchiveSourceConfig(Path.of(testDirectoryName+ "junkextrabit"))
+            LocalArchiveSourceConfig(Path.of(testDirectoryName + "junkextrabit"))
         }
     }
 
     @Test
-    fun `if config path is not a directory then fail`(){
+    fun `if config path is not a directory then fail`() {
         assertThrows<ArchiveSourceConfig.ArchiveSourceConfigError> {
             LocalArchiveSourceConfig(kotlin.io.path.createTempFile(Path.of(testDirectoryName), "localstorage-test-file"))
         }

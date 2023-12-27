@@ -1,36 +1,27 @@
 import database.ArchiveRepository
 import database.SnapshotRepository
-import database.StorehouseDatabase
-import database.entities.ArchiveEntity
-import destination.local.LocalArchiveDestination
-import destination.local.LocalArchiveDestinationConfig
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import source.local.LocalArchiveSource
-import source.local.LocalArchiveSourceConfig
-import java.nio.file.Path
-import kotlin.io.path.ExperimentalPathApi
-import kotlin.io.path.createTempDirectory
-import kotlin.io.path.deleteRecursively
 import kotlin.test.assertEquals
 
 class ArchiveManagerTests {
 
-   val testHarness = TestHarness()
+    val testHarness = TestHarness()
+
     @BeforeEach
-    fun before(){
+    fun before() {
         testHarness.before()
     }
 
     @AfterEach
-    fun after(){
+    fun after() {
         testHarness.after()
     }
 
     @Test
-    fun `can create new archive`(){
+    fun `can create new archive`() {
         val archiveManager = ArchiveManager(
             testHarness.localArchiveSource,
             testHarness.localArchiveDestination,
@@ -59,7 +50,7 @@ class ArchiveManagerTests {
     }
 
     @Test
-    fun `if archive name is not found throw exception`(){
+    fun `if archive name is not found throw exception`() {
         val archiveManager = ArchiveManager(
             testHarness.localArchiveSource,
             testHarness.localArchiveDestination,
@@ -71,7 +62,7 @@ class ArchiveManagerTests {
     }
 
     @Test
-    fun `can create snapshot`(){
+    fun `can create snapshot`() {
         val archiveManager = ArchiveManager(
             testHarness.localArchiveSource,
             testHarness.localArchiveDestination,

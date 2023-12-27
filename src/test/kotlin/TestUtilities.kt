@@ -16,7 +16,7 @@ class TestHarness {
     lateinit var localArchiveSource: LocalArchiveSource
     lateinit var localArchiveDestination: LocalArchiveDestination
 
-    fun before(){
+    fun before() {
         rootTestDirectory = createTempDirectory(testDirNamePrefix)
         databaseFile = kotlin.io.path.createTempFile(rootTestDirectory, "database.sqlite")
         database = StorehouseDatabase(databaseFile.toString())

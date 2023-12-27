@@ -1,6 +1,5 @@
 import database.ArchiveRepository
 import database.SnapshotRepository
-import database.StorehouseDatabase
 import database.entities.ArchiveEntity
 import database.entities.FileMetaEntity
 import database.entities.SnapshotEntity
@@ -26,7 +25,8 @@ class ArchiveManager(
                 OffsetDateTime.now(),
                 OffsetDateTime.now(),
                 archiveName,
-                archiveDescription)
+                archiveDescription
+            )
         )
     }
 

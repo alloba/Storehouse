@@ -13,6 +13,7 @@ import kotlin.test.assertTrue
 class SchemaMigrationTests {
     private val tempDirPrefix = "storehouse-test"
     private var tempdirPath = ""
+
     @BeforeEach
     fun before() {
         val tempdir = createTempDirectory(tempDirPrefix)

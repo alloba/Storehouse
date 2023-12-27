@@ -3,7 +3,7 @@ package database.entities
 import java.sql.ResultSet
 import java.time.OffsetDateTime
 
-data class FileMetaEntity (
+data class FileMetaEntity(
     val id: String,
     val dateCreated: OffsetDateTime,
     val dateUpdated: OffsetDateTime,
@@ -12,7 +12,7 @@ data class FileMetaEntity (
     val snapshotId: String
 ) {
     companion object {
-        fun fromResultSet(rs: ResultSet): FileMetaEntity{
+        fun fromResultSet(rs: ResultSet): FileMetaEntity {
             return FileMetaEntity(
                 id = rs.getString("id"),
                 dateCreated = OffsetDateTime.parse(rs.getString("date_created")),

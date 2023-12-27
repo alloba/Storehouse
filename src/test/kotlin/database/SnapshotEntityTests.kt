@@ -17,17 +17,17 @@ class SnapshotEntityTests {
     val harness = TestHarness()
 
     @BeforeEach
-    fun before(){
+    fun before() {
         harness.before()
     }
 
     @AfterEach
-    fun after(){
+    fun after() {
         harness.after()
     }
 
     @Test
-    fun `snapshot must be associated with existing archive`(){
+    fun `snapshot must be associated with existing archive`() {
         val snapshotRepository = SnapshotRepository(harness.database)
         val input = SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "desc", "123")
 
@@ -35,7 +35,7 @@ class SnapshotEntityTests {
     }
 
     @Test
-    fun `can insert snapshot into db`(){
+    fun `can insert snapshot into db`() {
         val snapshotRepository = SnapshotRepository(harness.database)
         val archiveRepository = ArchiveRepository(harness.database)
 
@@ -53,7 +53,7 @@ class SnapshotEntityTests {
     }
 
     @Test
-    fun `multiple snapshots can refer to the same archive`(){
+    fun `multiple snapshots can refer to the same archive`() {
         val snapshotRepository = SnapshotRepository(harness.database)
         val archiveRepository = ArchiveRepository(harness.database)
         val archiveInput = ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "", "")
@@ -66,7 +66,7 @@ class SnapshotEntityTests {
     }
 
     @Test
-    fun `cannot update snapshot that does not exist`(){
+    fun `cannot update snapshot that does not exist`() {
         val snapshotRepository = SnapshotRepository(harness.database)
         val archiveRepository = ArchiveRepository(harness.database)
         val archiveInput = ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "", "")

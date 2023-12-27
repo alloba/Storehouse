@@ -18,6 +18,7 @@ import kotlin.test.assertTrue
 
 class LocalArchiveSourceTests {
     private var tempDirectoryPath = ""
+
     @BeforeEach
     fun before() {
         tempDirectoryPath = createTempDirectory("storehouse-testing").toString()
@@ -25,7 +26,7 @@ class LocalArchiveSourceTests {
 
     @OptIn(ExperimentalPathApi::class)
     @AfterEach
-    fun after(){
+    fun after() {
         Path.of(tempDirectoryPath).deleteRecursively()
     }
 
@@ -64,7 +65,7 @@ class LocalArchiveSourceTests {
     }
 
     @Test
-    fun `file hash will not be computed if a path does not point to a regular file`(){
+    fun `file hash will not be computed if a path does not point to a regular file`() {
         val localArchiveSource = LocalArchiveSource(LocalArchiveSourceConfig(Path.of(tempDirectoryPath)))
         Path.of(tempDirectoryPath + File.separator + "tempfile.tmp").createFile()
         assertThrows<Exception> { localArchiveSource.computeMd5Hash(Path.of(tempDirectoryPath)) }

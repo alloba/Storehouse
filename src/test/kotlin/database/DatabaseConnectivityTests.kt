@@ -21,12 +21,12 @@ class DatabaseConnectivityTests {
 
     @OptIn(ExperimentalPathApi::class)
     @AfterEach
-    fun after(){
+    fun after() {
         tempSubdir?.deleteRecursively()
     }
 
     @Test
-    fun `able to create test database`(){
+    fun `able to create test database`() {
         val db = generateTestDatabaseFile()
         val storehouseDb = StorehouseDatabase(db.pathString)
 
@@ -38,7 +38,7 @@ class DatabaseConnectivityTests {
         val db = generateTestDatabaseFile()
         val storehouseDb = StorehouseDatabase(db.pathString)
         storehouseDb.connection.close()
-        assertTrue (storehouseDb.connection.isClosed)
+        assertTrue(storehouseDb.connection.isClosed)
     }
 
     private fun generateTestDatabaseFile(): Path {
