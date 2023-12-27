@@ -36,20 +36,8 @@ class LocalArchiveDestinationTests {
         val otherFile = kotlin.io.path.createTempFile(otherDir, "testfile-zzz")
 
         assertTrue(destination.listFiles().isEmpty())
-        destination.copyFile(otherFile, otherDir)
+        destination.copyFile(otherFile)
 
         assertTrue(destination.listFiles().size == 1)
-        assertTrue(destination.listFiles()[0].toString().contains("testfile-zzz"))
-    }
-
-    @Test
-    fun `will not copy local files without a valid root parent to get a relative path from`() {
-        val destination = LocalArchiveDestination(LocalArchiveDestinationConfig(Path.of(tempDirPath)))
-        val otherDir = createTempDirectory("storehouse-localarchive-testing")
-        val invalidDir = Path.of("asdf/xcvzxcvz/aaaa/rewwerrwewer/")
-        val otherFile = kotlin.io.path.createTempFile(otherDir, "testfile-zzz")
-
-        val e = assertThrows<Exception> { destination.copyFile(otherFile, invalidDir) }
-        assertTrue(e.message?.contains("cannot copy file") ?: false)
     }
 }

@@ -52,6 +52,8 @@ class ArchiveManagerTests {
         val archiveManager = createArchiveManager(testHarness)
         val archive = archiveManager.createNewArchive("test archive", "archive desc")
         val snapshot = archiveManager.createNewSnapshot(archive, emptyList())
+
+        assertEquals(archive.id, snapshot.archiveId)
     }
 
     private fun createArchiveManager(testHarness: TestHarness): ArchiveManager {

@@ -27,7 +27,7 @@ create table if not exists File
 
     name           text,
     file_extension text,
-    md5_hash       text
+    md5_hash       text unique
 );
 
 create table if not exists FileMeta

@@ -29,6 +29,14 @@ class FileRepository(private val database: StorehouseDatabase) {
         else FileEntity.fromResultSet(rs)
     }
 
+    fun getFileEntityByMd5Hash(hash: String): FileEntity? {
+        val statement = database.connection.prepareStatement("select $FILE_TABLE_FIELDS from $FILE_TABLE where md5_hash = ?")
+        statement.setString(1, hash)
+        val rs = statement.executeQuery()
+        return if (!rs.next()) null
+        else FileEntity.fromResultSet(rs)
+    }
+
     companion object {
         const val FILE_TABLE = "File"
         const val FILE_TABLE_FIELDS = " id, date_created, date_updated, name, file_extension, md5_hash "

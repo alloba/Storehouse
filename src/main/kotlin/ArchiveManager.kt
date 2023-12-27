@@ -1,20 +1,24 @@
 import database.repo.ArchiveRepository
 import database.repo.SnapshotRepository
 import database.entities.ArchiveEntity
+import database.entities.FileEntity
 import database.entities.FileMetaEntity
 import database.entities.SnapshotEntity
 import database.repo.FileMetaRepository
 import database.repo.FileRepository
-import destination.local.LocalArchiveDestination
+import destination.ArchiveDestination
 import org.slf4j.LoggerFactory
 import source.ArchiveSource
 import java.nio.file.Path
 import java.time.OffsetDateTime
 import java.util.*
+import kotlin.io.path.extension
+import kotlin.io.path.name
+import kotlin.io.path.pathString
 
 class ArchiveManager(
     val source: ArchiveSource,
-    val destination: LocalArchiveDestination,
+    val destination: ArchiveDestination,
     val archiveRepository: ArchiveRepository,
     val snapshotRepository: SnapshotRepository,
     val fileRepository: FileRepository,
@@ -47,8 +51,45 @@ class ArchiveManager(
         return snapshotEntity
     }
 
-    private fun submitToSnapshot(snapshot: SnapshotEntity, pathObjects: List<Path>): List<FileMetaEntity> {
-        TODO()
+    private fun submitToSnapshot(snapshot: SnapshotEntity, objects: List<Path>): List<FileMetaEntity> {
+        val filemetas = mutableListOf<FileMetaEntity>()
+        for (file in objects){
+            val hash = source.computeMd5Hash(file)
+            val existingFileId = fileRepository.getFileEntityByMd5Hash(hash)?.id
+
+            if (existingFileId != null ){
+                fileMetaRepository.insertFileMeta(
+                    FileMetaEntity(
+                        UUID.randomUUID().toString(),
+                        OffsetDateTime.now(),
+                        OffsetDateTime.now(),
+                        file.pathString,
+                        existingFileId,
+                        snapshot.id)
+                ).let { filemetas.add(it) }
+            } else {
+                destination.copyFile(file)
+                val fileEntity = fileRepository.insertFileEntity(
+                    FileEntity(
+                        UUID.randomUUID().toString(),
+                        OffsetDateTime.now(),
+                        OffsetDateTime.now(),
+                        file.name,
+                        file.extension,
+                        hash)
+                )
+                fileMetaRepository.insertFileMeta(
+                    FileMetaEntity(
+                        UUID.randomUUID().toString(),
+                        OffsetDateTime.now(),
+                        OffsetDateTime.now(),
+                        file.pathString,
+                        fileEntity.id,
+                        snapshot.id)
+                ).let { filemetas.add(it) }
+            }
+        }
+        return filemetas
     }
 
     fun tidyArchive(archive: ArchiveEntity) {

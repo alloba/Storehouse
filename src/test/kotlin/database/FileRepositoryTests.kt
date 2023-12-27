@@ -49,8 +49,24 @@ class FileRepositoryTests {
     }
 
     @Test
-    fun `return null when no file found in db`(){
+    fun `can retrieve file by hash`(){
+        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "filename", "fileextension", "hash")
+        val fileRepository = FileRepository(testHarness.database)
+        val saved = fileRepository.insertFileEntity(input)
+        val result = fileRepository.getFileEntityByMd5Hash(saved.md5Hash)!!
+
+        assertEquals(saved.id, result.id)
+    }
+
+    @Test
+    fun `return null when no file found in db by id`(){
         val fileRepository = FileRepository(testHarness.database)
         assertTrue(fileRepository.getFileEntityById("blah") == null)
+    }
+
+    @Test
+    fun `return null when no file found in db by hash`(){
+        val fileRepository = FileRepository(testHarness.database)
+        assertTrue(fileRepository.getFileEntityByMd5Hash("blah") == null)
     }
 }
