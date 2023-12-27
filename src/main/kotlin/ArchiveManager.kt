@@ -1,5 +1,5 @@
-import database.ArchiveRepository
-import database.SnapshotRepository
+import database.repo.ArchiveRepository
+import database.repo.SnapshotRepository
 import database.entities.ArchiveEntity
 import database.entities.FileMetaEntity
 import database.entities.SnapshotEntity

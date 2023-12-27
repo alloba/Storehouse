@@ -1,5 +1,5 @@
-import database.ArchiveRepository
-import database.SnapshotRepository
+import database.repo.ArchiveRepository
+import database.repo.SnapshotRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

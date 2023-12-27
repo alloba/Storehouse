@@ -3,6 +3,8 @@ package database
 import TestHarness
 import database.entities.ArchiveEntity
 import database.entities.SnapshotEntity
+import database.repo.ArchiveRepository
+import database.repo.SnapshotRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

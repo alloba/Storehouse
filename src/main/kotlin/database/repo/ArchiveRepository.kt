@@ -1,5 +1,6 @@
-package database
+package database.repo
 
+import database.StorehouseDatabase
 import database.entities.ArchiveEntity
 import toDb
 import java.time.OffsetDateTime
