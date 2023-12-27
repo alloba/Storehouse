@@ -1,0 +1,56 @@
+package database
+
+import TestHarness
+import database.entities.FileEntity
+import database.repo.FileRepository
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import java.time.OffsetDateTime
+import java.util.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
+
+class FileRepositoryTests {
+    val testHarness = TestHarness()
+
+    @BeforeEach
+    fun before(){
+        testHarness.before()
+    }
+
+    @AfterEach
+    fun after(){
+        testHarness.after()
+    }
+
+    @Test
+    fun `can create file in db`(){
+        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "filename", "fileextension", "hash")
+        val fileRepository = FileRepository(testHarness.database)
+        val output = fileRepository.insertFileEntity(input)
+
+        assertEquals(input.id, output.id)
+        assertEquals(input.name, output.name)
+        assertEquals(input.fileExtension, output.fileExtension)
+        assertEquals(input.md5Hash, output.md5Hash)
+        assertNotEquals(input.dateCreated, output.dateCreated)
+    }
+
+    @Test
+    fun `can retrieve file by id`(){
+        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "filename", "fileextension", "hash")
+        val fileRepository = FileRepository(testHarness.database)
+        val saved = fileRepository.insertFileEntity(input)
+        val result = fileRepository.getFileEntityById(input.id)
+
+        assertEquals(saved, result)
+    }
+
+    @Test
+    fun `return null when no file found in db`(){
+        val fileRepository = FileRepository(testHarness.database)
+        assertTrue(fileRepository.getFileEntityById("blah") == null)
+    }
+}

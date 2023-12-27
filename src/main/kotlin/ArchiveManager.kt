@@ -3,6 +3,7 @@ import database.repo.SnapshotRepository
 import database.entities.ArchiveEntity
 import database.entities.FileMetaEntity
 import database.entities.SnapshotEntity
+import database.repo.FileRepository
 import destination.local.LocalArchiveDestination
 import org.slf4j.LoggerFactory
 import source.ArchiveSource
@@ -14,7 +15,8 @@ class ArchiveManager(
     val source: ArchiveSource,
     val destination: LocalArchiveDestination,
     val archiveRepository: ArchiveRepository,
-    val snapshotRepository: SnapshotRepository
+    val snapshotRepository: SnapshotRepository,
+    val fileRepository: FileRepository
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
     fun createNewArchive(archiveName: String, archiveDescription: String): ArchiveEntity {

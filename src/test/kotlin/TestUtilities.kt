@@ -1,4 +1,7 @@
 import database.StorehouseDatabase
+import database.repo.ArchiveRepository
+import database.repo.FileRepository
+import database.repo.SnapshotRepository
 import destination.local.LocalArchiveDestination
 import destination.local.LocalArchiveDestinationConfig
 import source.local.LocalArchiveSource
@@ -15,6 +18,7 @@ class TestHarness {
     lateinit var database: StorehouseDatabase
     lateinit var localArchiveSource: LocalArchiveSource
     lateinit var localArchiveDestination: LocalArchiveDestination
+    lateinit var archiveManager: ArchiveManager
 
     fun before() {
         rootTestDirectory = createTempDirectory(testDirNamePrefix)
@@ -22,6 +26,13 @@ class TestHarness {
         database = StorehouseDatabase(databaseFile.toString())
         localArchiveSource = LocalArchiveSource(LocalArchiveSourceConfig(createTempDirectory(rootTestDirectory, "localArchiveSource")))
         localArchiveDestination = LocalArchiveDestination(LocalArchiveDestinationConfig(createTempDirectory(rootTestDirectory, "localArchiveDestination")))
+        archiveManager = ArchiveManager(
+            source = localArchiveSource,
+            destination = localArchiveDestination,
+            archiveRepository = ArchiveRepository(database),
+            snapshotRepository = SnapshotRepository(database),
+            fileRepository = FileRepository(database)
+        )
     }
 
     @OptIn(ExperimentalPathApi::class)
