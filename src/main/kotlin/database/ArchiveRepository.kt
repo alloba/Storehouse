@@ -27,6 +27,16 @@ class ArchiveRepository(private val database: StorehouseDatabase) {
         else ArchiveEntity.fromResultSet(rs)
     }
 
+    fun getArchiveEntityByName(name: String): ArchiveEntity? {
+        val query = "select $ARCHIVE_TABLE_FIELDS from $ARCHIVE_TABLE where name = ?"
+        val statement = database.connection.prepareStatement(query)
+        statement.setString(1, name)
+        val rs = statement.executeQuery()
+
+        return if (!rs.next()) null
+        else ArchiveEntity.fromResultSet(rs)
+    }
+
     fun getAllArchiveEntities(): List<ArchiveEntity> {
         val statement = database.connection.prepareStatement("select $ARCHIVE_TABLE_FIELDS from $ARCHIVE_TABLE")
         val rs = statement.executeQuery()
