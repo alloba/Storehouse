@@ -5,7 +5,7 @@ import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
 
-class LocalArchiveSourceConfig(val filepath: Path) : ArchiveSourceConfig(mapOf("filepath" to filepath)) {
+class LocalArchiveSourceConfig(val filepath: Path) : ArchiveSourceConfig(mapOf("path" to filepath.toString())) {
     init {
         val errors = mutableListOf<String>()
         if (!filepath.exists()) {

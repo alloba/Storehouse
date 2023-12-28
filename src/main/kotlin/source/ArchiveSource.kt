@@ -13,4 +13,6 @@ abstract class ArchiveSource(configuration: ArchiveSourceConfig) {
     abstract fun computeMd5Hash(filePath: Path): String
 
     abstract fun computeFileSizeBytes(filePath: Path): Long
+
+    abstract fun getConfig(): ArchiveSourceConfig
 }

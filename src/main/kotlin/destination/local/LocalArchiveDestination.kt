@@ -1,6 +1,7 @@
 package destination.local
 
 import destination.ArchiveDestination
+import destination.ArchiveDestinationConfig
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.copyTo
@@ -38,5 +39,9 @@ class LocalArchiveDestination(private val config: LocalArchiveDestinationConfig)
 
         return if (target.isRegularFile()) target
         else null
+    }
+
+    override fun getConfig(): ArchiveDestinationConfig {
+        return config
     }
 }

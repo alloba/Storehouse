@@ -1,6 +1,7 @@
 package source.local
 
 import source.ArchiveSource
+import source.ArchiveSourceConfig
 import java.nio.file.Path
 import java.security.MessageDigest
 import kotlin.io.path.fileSize
@@ -31,5 +32,9 @@ class LocalArchiveSource(private val config: LocalArchiveSourceConfig) : Archive
         }
 
         return filePath.fileSize()
+    }
+
+    override fun getConfig(): ArchiveSourceConfig {
+        return config
     }
 }

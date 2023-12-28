@@ -7,4 +7,5 @@ abstract class ArchiveDestination(configuration: ArchiveDestinationConfig) {
     abstract fun submitFiles(pathHashPairs: List<Pair<Path, String>>, rootParentPath: Path): Boolean
     abstract fun listFiles(): List<Path>
     abstract fun retrieveFileByHash(hash: String): Path?
+    abstract fun getConfig(): ArchiveDestinationConfig
 }

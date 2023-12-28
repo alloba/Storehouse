@@ -1,7 +1,7 @@
 package source
 
-abstract class ArchiveSourceConfig(private val configValues: Map<String, Any>) {
-    fun getConfig(): Map<String, Any> {
+abstract class ArchiveSourceConfig(private val configValues: Map<String, String>) {
+    fun getConfig(): Map<String, String> {
         return this.configValues
     }
 

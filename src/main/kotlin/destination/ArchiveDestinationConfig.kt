@@ -1,7 +1,7 @@
 package destination
 
-abstract class ArchiveDestinationConfig(private val configValues: Map<String, Any>) {
-    fun getConfig(): Map<String, Any> {
+abstract class ArchiveDestinationConfig(private val configValues: Map<String, String>) {
+    fun getConfig(): Map<String, String> {
         return this.configValues
     }
 
