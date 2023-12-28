@@ -5,6 +5,7 @@ import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.copyTo
+import kotlin.io.path.isRegularFile
 
 class LocalArchiveDestination(private val config: LocalArchiveDestinationConfig) : ArchiveDestination(config) {
     /**
@@ -14,7 +15,7 @@ class LocalArchiveDestination(private val config: LocalArchiveDestinationConfig)
      */
     @OptIn(ExperimentalPathApi::class)
     override fun copyFile(sourceFilePath: Path, md5Hash: String): Boolean {
-        val newFilePath = Path.of(config.rootPath.toString() + File.separator + md5Hash + ".archive")
+        val newFilePath = Path.of(config.rootPath.toString() + File.separator + md5Hash)
         sourceFilePath.copyTo(newFilePath)
         return true
     }
@@ -32,5 +33,12 @@ class LocalArchiveDestination(private val config: LocalArchiveDestinationConfig)
             .filter { it.isFile }
             .map { it.toPath() }
             .toList()
+    }
+
+    override fun retrieveFileByHash(hash: String): Path? {
+        val target = Path.of(config.rootPath.toString() + File.separator + hash)
+
+        return if (target.isRegularFile()) target
+        else null
     }
 }

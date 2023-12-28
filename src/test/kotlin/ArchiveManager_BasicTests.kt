@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 
-class ArchiveManagerTests {
+class ArchiveManager_BasicTests {
 
     private val testHarness = TestHarness()
 
