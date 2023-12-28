@@ -14,6 +14,7 @@ class FileRepository(private val database: StorehouseDatabase) {
         statement.setString(2, copy.dateCreated.toDb())
         statement.setString(3, copy.dateUpdated.toDb())
         statement.setString(4, copy.md5Hash)
+        statement.setLong(5, copy.sizeBytes)
 
         statement.execute()
         return copy
@@ -37,8 +38,8 @@ class FileRepository(private val database: StorehouseDatabase) {
 
     companion object {
         const val FILE_TABLE = "File"
-        const val FILE_TABLE_FIELDS = " id, date_created, date_updated, md5_hash "
-        const val FILE_TABLE_FIELDS_INSERTS = " ?, ?, ?, ? "
-        const val FILE_TABLE_UPDATE_FIELDS = " date_created = ?, date_updated = ?, md5_hash = ? "
+        const val FILE_TABLE_FIELDS = " id, date_created, date_updated, md5_hash, size_bytes "
+        const val FILE_TABLE_FIELDS_INSERTS = " ?, ?, ?, ?, ? "
+        const val FILE_TABLE_UPDATE_FIELDS = " date_created = ?, date_updated = ?, md5_hash = ?, size_bytes = ? "
     }
 }

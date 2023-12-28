@@ -29,6 +29,18 @@ class SnapshotRepository(private val database: StorehouseDatabase) {
         else SnapshotEntity.fromResultSet(rs)
     }
 
+    fun getSnapshotsForArchiveId(archiveId: String): List<SnapshotEntity>{
+        val statement = database.connection.prepareStatement("select $SNAPSHOT_TABLE_FIELDS from $SNAPSHOT_TABLE where archive_id = ?")
+        statement.setString(1, archiveId)
+
+        val results = mutableListOf<SnapshotEntity>()
+        val rs = statement.executeQuery()
+        while (rs.next()){
+            results.add(SnapshotEntity.fromResultSet(rs))
+        }
+        return results.toList()
+    }
+
     fun updateSnapshotEntity(snapshot: SnapshotEntity): SnapshotEntity {
         val statement = database.connection.prepareStatement("update $SNAPSHOT_TABLE set $SNAPSHOT_TABLE_UPDATE_FIELDS where id = ?")
         val updateEntity = snapshot.copy(dateUpdated = OffsetDateTime.now())

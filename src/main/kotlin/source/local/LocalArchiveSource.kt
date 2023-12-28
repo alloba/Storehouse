@@ -3,6 +3,7 @@ package source.local
 import source.ArchiveSource
 import java.nio.file.Path
 import java.security.MessageDigest
+import kotlin.io.path.fileSize
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.readBytes
 
@@ -22,5 +23,13 @@ class LocalArchiveSource(private val config: LocalArchiveSourceConfig) : Archive
         return MessageDigest.getInstance("SHA-256")
             .digest(filePath.readBytes())
             .fold(StringBuilder()) { sb, it -> sb.append("%02x".format(it)) }.toString()
+    }
+
+    override fun computeFileSizeBytes(filePath: Path): Long {
+        if (!filePath.isRegularFile()){
+            throw Exception("Not a regular file, cannot compute file size - $filePath")
+        }
+
+        return filePath.fileSize()
     }
 }

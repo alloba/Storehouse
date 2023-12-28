@@ -25,7 +25,8 @@ create table if not exists File
     date_created   text not null,
     date_updated   text not null,
 
-    md5_hash       text unique not null
+    md5_hash       text unique not null,
+    size_bytes     integer not null
 );
 
 create table if not exists FileMeta

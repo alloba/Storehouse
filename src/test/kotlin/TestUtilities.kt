@@ -19,7 +19,7 @@ class TestHarness {
     lateinit var database: StorehouseDatabase
     lateinit var localArchiveSource: LocalArchiveSource
     lateinit var localArchiveDestination: LocalArchiveDestination
-    lateinit var archiveManager: ArchiveManager
+    lateinit var archiveOperator: ArchiveOperator
 
     fun before() {
         rootTestDirectory = createTempDirectory(testDirNamePrefix)
@@ -27,7 +27,7 @@ class TestHarness {
         database = StorehouseDatabase(databaseFile.toString())
         localArchiveSource = LocalArchiveSource(LocalArchiveSourceConfig(createTempDirectory(rootTestDirectory, "localArchiveSource")))
         localArchiveDestination = LocalArchiveDestination(LocalArchiveDestinationConfig(createTempDirectory(rootTestDirectory, "localArchiveDestination")))
-        archiveManager = ArchiveManager(
+        archiveOperator = ArchiveOperator(
             source = localArchiveSource,
             destination = localArchiveDestination,
             archiveRepository = ArchiveRepository(database),

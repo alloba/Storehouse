@@ -16,7 +16,7 @@ import kotlin.io.path.extension
 import kotlin.io.path.name
 import kotlin.io.path.pathString
 
-class ArchiveManager(
+class ArchiveOperator(
     val source: ArchiveSource,
     val destination: ArchiveDestination,
     val archiveRepository: ArchiveRepository,
@@ -42,6 +42,10 @@ class ArchiveManager(
         return archiveRepository.getArchiveEntityByName(archiveName) ?: throw Exception("Archive with name [$archiveName] not found.")
     }
 
+    fun getSnapshotsByArchive(archiveEntity: ArchiveEntity): List<SnapshotEntity>{
+        return snapshotRepository.getSnapshotsForArchiveId(archiveEntity.id)
+    }
+
     fun createNewSnapshot(archive: ArchiveEntity, files: List<Path>, description: String = ""): SnapshotEntity {
         val snapshotEntity = snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), description, archive.id))
 
@@ -55,6 +59,7 @@ class ArchiveManager(
         val filemetas = mutableListOf<FileMetaEntity>()
         for (file in objects){
             val hash = source.computeMd5Hash(file)
+            val byteSize = source.computeFileSizeBytes(file)
             val existingFileId = fileRepository.getFileEntityByMd5Hash(hash)?.id
 
             if (existingFileId != null ){
@@ -76,7 +81,9 @@ class ArchiveManager(
                         UUID.randomUUID().toString(),
                         OffsetDateTime.now(),
                         OffsetDateTime.now(),
-                        hash)
+                        hash,
+                        byteSize
+                        )
                 )
                 fileMetaRepository.insertFileMeta(
                     FileMetaEntity(
@@ -92,13 +99,5 @@ class ArchiveManager(
             }
         }
         return filemetas
-    }
-
-    fun tidyArchive(archive: ArchiveEntity) {
-        TODO()
-    }
-
-    fun tidySnapshot(snapshot: SnapshotEntity) {
-        TODO()
     }
 }

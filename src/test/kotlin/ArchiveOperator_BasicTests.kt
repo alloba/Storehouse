@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 
-class ArchiveManager_BasicTests {
+class ArchiveOperator_BasicTests {
 
     private val testHarness = TestHarness()
 
@@ -56,8 +56,8 @@ class ArchiveManager_BasicTests {
         assertEquals(archive.id, snapshot.archiveId)
     }
 
-    private fun createArchiveManager(testHarness: TestHarness): ArchiveManager {
-        return ArchiveManager(
+    private fun createArchiveManager(testHarness: TestHarness): ArchiveOperator {
+        return ArchiveOperator(
             testHarness.localArchiveSource,
             testHarness.localArchiveDestination,
             ArchiveRepository(testHarness.database),
