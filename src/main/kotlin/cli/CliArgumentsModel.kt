@@ -10,7 +10,7 @@ data class CliArgumentsModel(
     val commandString: String
 ) {
     init {
-        require(! Path.of(configFilePath).isDirectory() && Path.of(configFilePath).isReadable()){"CliArgumentsModel - provided path $configFilePath must be a valid file"}
-        require(commandName.isNotBlank()) {"CliArgumentsModel - provided command must not be blank"}
+        require(!Path.of(configFilePath).isDirectory() && Path.of(configFilePath).isReadable()) { "CliArgumentsModel - provided path $configFilePath must be a valid file" }
+        require(commandName.isNotBlank()) { "CliArgumentsModel - provided command must not be blank" }
     }
 }

@@ -23,37 +23,39 @@ fun main(args: Array<String>) {
 }
 
 
-fun generateArchiveOperator(runtimeConfiguration: RuntimeConfiguration): ArchiveOperator{
+fun generateArchiveOperator(runtimeConfiguration: RuntimeConfiguration): ArchiveOperator {
     val databasePath = Path.of(runtimeConfiguration.databaseLocation)
-    if (databasePath.isDirectory() || ! databasePath.isReadable() || ! databasePath.isWritable()){
+    if (databasePath.isDirectory() || !databasePath.isReadable() || !databasePath.isWritable()) {
         throw Exception("Unable to operate with provided database file $databasePath")
     }
     val database = StorehouseDatabase(databasePath.toString())
 
-    val source = when(runtimeConfiguration.sourceType){
-        "Local" ->  {
-            val sourcePathString = runtimeConfiguration.sourceConfig["path"]?:throw Exception("necessary config option not found for local source config - [path]")
+    val source = when (runtimeConfiguration.sourceType) {
+        "Local" -> {
+            val sourcePathString = runtimeConfiguration.sourceConfig["path"] ?: throw Exception("necessary config option not found for local source config - [path]")
             val sourcePath = Path.of(sourcePathString)
-            if (! sourcePath.isDirectory()){
+            if (!sourcePath.isDirectory()) {
                 throw Exception("Provided source path [$sourcePath] is not a valid directory")
             }
 
             LocalArchiveSource(mapOf("path" to sourcePath.toString()))
         }
+
         else -> {
             throw Exception("provided sourceType [${runtimeConfiguration.sourceType}] for storehouse is invalid")
         }
     }
 
-    val destination = when(runtimeConfiguration.destinationType){
+    val destination = when (runtimeConfiguration.destinationType) {
         "Local" -> {
-            val destinationPathString = runtimeConfiguration.sourceConfig["path"]?: throw Exception("necessary config option not found for local destination config - [path]")
+            val destinationPathString = runtimeConfiguration.sourceConfig["path"] ?: throw Exception("necessary config option not found for local destination config - [path]")
             val destinationPath = Path.of(destinationPathString)
-            if (! destinationPath.isDirectory()){
+            if (!destinationPath.isDirectory()) {
                 throw Exception("Provided destination path [$destinationPath] is not a valid directory")
             }
             LocalArchiveDestination(mapOf("path" to destinationPath.toString()))
         }
+
         else -> {
             throw Exception("Provided destinationType [${runtimeConfiguration.destinationType}] for storehouse is invalid")
         }

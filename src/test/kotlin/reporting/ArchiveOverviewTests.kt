@@ -13,7 +13,7 @@ class ArchiveOverviewTests {
     val harness = TestHarness()
 
     @BeforeEach
-    fun before(){
+    fun before() {
         harness.before()
     }
 
@@ -23,8 +23,8 @@ class ArchiveOverviewTests {
     }
 
     @Test
-    fun `can generate a string with correct reporting info`(){
-        val snapshotFiles = listOf(1,2,3).map {  kotlin.io.path.createTempFile(harness.rootTestDirectory, "testfile_$it.txt") }
+    fun `can generate a string with correct reporting info`() {
+        val snapshotFiles = listOf(1, 2, 3).map { kotlin.io.path.createTempFile(harness.rootTestDirectory, "testfile_$it.txt") }
         val additionalSnapshotFiles = listOf("z").map { kotlin.io.path.createTempFile(harness.rootTestDirectory, "testfile_$it.txt") }
 
         snapshotFiles.forEach { it.writeText(it.toString()) }

@@ -20,7 +20,7 @@ class FileRepository(private val database: StorehouseDatabase) {
         return copy
     }
 
-    fun getFileEntityById(id: String): FileEntity?{
+    fun getFileEntityById(id: String): FileEntity? {
         val statement = database.connection.prepareStatement("select $FILE_TABLE_FIELDS from $FILE_TABLE where id = ?")
         statement.setString(1, id)
         val rs = statement.executeQuery()
@@ -36,8 +36,9 @@ class FileRepository(private val database: StorehouseDatabase) {
         else FileEntity.fromResultSet(rs)
     }
 
-    fun getFileEntitiesByArchiveId(archiveId: String): List<FileEntity>{
-        val statement = database.connection.prepareStatement("""
+    fun getFileEntitiesByArchiveId(archiveId: String): List<FileEntity> {
+        val statement = database.connection.prepareStatement(
+            """
             select F.id, F.date_created, f.date_updated, F.md5_hash, f.size_bytes
             from File F
                 join FileMeta FM on F.id = FM.file_id
@@ -45,12 +46,13 @@ class FileRepository(private val database: StorehouseDatabase) {
                 join Archive AR on SN.archive_id = AR.id
             where AR.id = ?
             group by F.id
-        """.trimIndent())
+        """.trimIndent()
+        )
         statement.setString(1, archiveId)
 
         val results = mutableListOf<FileEntity>()
         val rs = statement.executeQuery()
-        while (rs.next()){
+        while (rs.next()) {
             results.add(FileEntity.fromResultSet(rs))
         }
         return results.toList()

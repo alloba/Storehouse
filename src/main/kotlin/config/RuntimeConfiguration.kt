@@ -21,9 +21,9 @@ data class RuntimeConfiguration(
 
         fun fromFilePath(configFilePath: String): RuntimeConfiguration {
             val configPath = Path.of(configFilePath)
-            require(! configPath.isDirectory() && configPath.isReadable() ){"Config file [${configPath}] path must be readable file."}
+            require(!configPath.isDirectory() && configPath.isReadable()) { "Config file [${configPath}] path must be readable file." }
 
-            return fromJsonString( configPath.readText() )
+            return fromJsonString(configPath.readText())
         }
     }
 }

@@ -9,11 +9,12 @@ import kotlin.io.path.isRegularFile
 
 class LocalArchiveDestination(options: Map<String, String>) : ArchiveDestination(options) {
     private val filePath: Path
+
     init {
-        require(options.containsKey("path")) {"LocalArchiveDestination options must contain a path"}
-        val filePathString = options["path"]?: throw IllegalArgumentException("LocalArchiveDestination path option must contain a value")
+        require(options.containsKey("path")) { "LocalArchiveDestination options must contain a path" }
+        val filePathString = options["path"] ?: throw IllegalArgumentException("LocalArchiveDestination path option must contain a value")
         filePath = Path.of(filePathString)
-        require(filePath.isDirectory()) {"LocalArchiveDestination provided path [$filePathString] must be a valid directory"}
+        require(filePath.isDirectory()) { "LocalArchiveDestination provided path [$filePathString] must be a valid directory" }
     }
 
     /**

@@ -1,11 +1,11 @@
-import database.repo.ArchiveRepository
-import database.repo.SnapshotRepository
 import database.entities.ArchiveEntity
 import database.entities.FileEntity
 import database.entities.FileMetaEntity
 import database.entities.SnapshotEntity
+import database.repo.ArchiveRepository
 import database.repo.FileMetaRepository
 import database.repo.FileRepository
+import database.repo.SnapshotRepository
 import destination.ArchiveDestination
 import org.slf4j.LoggerFactory
 import source.ArchiveSource
@@ -37,6 +37,7 @@ class ArchiveOperator(
             )
         )
     }
+
     fun createNewSnapshot(archive: ArchiveEntity, files: List<Path>, description: String = ""): SnapshotEntity {
         val snapshotEntity = snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), description, archive.id))
 
@@ -51,7 +52,7 @@ class ArchiveOperator(
         return archiveRepository.getArchiveEntityByName(archiveName) ?: throw Exception("Archive with name [$archiveName] not found.")
     }
 
-    fun getSnapshotsByArchive(archiveEntity: ArchiveEntity): List<SnapshotEntity>{
+    fun getSnapshotsByArchive(archiveEntity: ArchiveEntity): List<SnapshotEntity> {
         return snapshotRepository.getSnapshotsForArchiveId(archiveEntity.id)
     }
 
@@ -66,12 +67,12 @@ class ArchiveOperator(
 
     private fun submitToSnapshot(snapshot: SnapshotEntity, objects: List<Path>): List<FileMetaEntity> {
         val filemetas = mutableListOf<FileMetaEntity>()
-        for (file in objects){
+        for (file in objects) {
             val hash = source.computeMd5Hash(file)
             val byteSize = source.computeFileSizeBytes(file)
             val existingFileId = fileRepository.getFileEntityByMd5Hash(hash)?.id
 
-            if (existingFileId != null ){
+            if (existingFileId != null) {
                 fileMetaRepository.insertFileMeta(
                     FileMetaEntity(
                         UUID.randomUUID().toString(),
@@ -81,7 +82,8 @@ class ArchiveOperator(
                         file.name,
                         file.extension,
                         existingFileId,
-                        snapshot.id)
+                        snapshot.id
+                    )
                 ).let { filemetas.add(it) }
             } else {
                 destination.submitFile(file, hash)
@@ -92,7 +94,7 @@ class ArchiveOperator(
                         OffsetDateTime.now(),
                         hash,
                         byteSize
-                        )
+                    )
                 )
                 fileMetaRepository.insertFileMeta(
                     FileMetaEntity(
@@ -103,7 +105,8 @@ class ArchiveOperator(
                         file.name,
                         file.extension,
                         fileEntity.id,
-                        snapshot.id)
+                        snapshot.id
+                    )
                 ).let { filemetas.add(it) }
             }
         }

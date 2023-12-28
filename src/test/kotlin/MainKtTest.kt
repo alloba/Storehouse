@@ -41,7 +41,7 @@ class MainKtTest {
     }
 
     @Test
-    fun `can execute info display command`(){
+    fun `can execute info display command`() {
         val args = arrayOf("--config", configJsonFilePath.toString(), "--command", "DA", "test")
         harness.archiveOperator.createNewArchive("test", "test archive")
         main(args)

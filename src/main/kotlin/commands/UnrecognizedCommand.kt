@@ -2,7 +2,7 @@ package commands
 
 import ArchiveOperator
 
-class UnrecognizedCommand: CommandInterface {
+class UnrecognizedCommand : CommandInterface {
     override fun execute(archiveOperator: ArchiveOperator, commandOptions: String): Boolean {
         throw Exception("Unrecognized command provided - no action will be taken")
     }

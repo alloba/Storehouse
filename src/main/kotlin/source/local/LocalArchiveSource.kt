@@ -10,13 +10,15 @@ import kotlin.io.path.readBytes
 
 class LocalArchiveSource(options: Map<String, String>) : ArchiveSource(options) {
     private val filePath: Path
+
     init {
-        require(options.containsKey("path")) {"LocalArchiveSource options must contain a path value"}
-        val filePathString = options["path"]?: throw IllegalArgumentException("LocalArchiveSource path option must be populated")
+        require(options.containsKey("path")) { "LocalArchiveSource options must contain a path value" }
+        val filePathString = options["path"] ?: throw IllegalArgumentException("LocalArchiveSource path option must be populated")
         filePath = Path.of(filePathString)
-        require(Path.of(filePathString).isDirectory()) {"LocalArchiveSource path [$filePathString] must be a valid directory"}
+        require(Path.of(filePathString).isDirectory()) { "LocalArchiveSource path [$filePathString] must be a valid directory" }
 
     }
+
     override fun getAllFiles(): List<Path> {
         return filePath.toFile()
             .walkTopDown()
@@ -35,7 +37,7 @@ class LocalArchiveSource(options: Map<String, String>) : ArchiveSource(options) 
     }
 
     override fun computeFileSizeBytes(filePath: Path): Long {
-        if (!filePath.isRegularFile()){
+        if (!filePath.isRegularFile()) {
             throw Exception("Not a regular file, cannot compute file size - $filePath")
         }
 

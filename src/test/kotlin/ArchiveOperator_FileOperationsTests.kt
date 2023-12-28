@@ -9,7 +9,7 @@ class ArchiveOperator_FileOperationsTests {
     val harness = TestHarness()
 
     @BeforeEach
-    fun before(){
+    fun before() {
         harness.before()
     }
 
@@ -19,7 +19,7 @@ class ArchiveOperator_FileOperationsTests {
     }
 
     @Test
-    fun `multiple files can be submitted to a snapshot and then will persist in the database and in storage, and can be retrieved`(){
+    fun `multiple files can be submitted to a snapshot and then will persist in the database and in storage, and can be retrieved`() {
         val file1 = kotlin.io.path.createTempFile("storehouse-testing-file1")
         val file2 = kotlin.io.path.createTempFile("storehouse-testing-file2")
         val file3 = kotlin.io.path.createTempFile("storehouse-testing-file1")

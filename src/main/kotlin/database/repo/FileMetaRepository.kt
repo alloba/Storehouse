@@ -31,13 +31,13 @@ class FileMetaRepository(val database: StorehouseDatabase) {
         else FileMetaEntity.fromResultSet(rs)
     }
 
-    fun getFileMetasBySnapshotId(snapshotId: String): List<FileMetaEntity>{
+    fun getFileMetasBySnapshotId(snapshotId: String): List<FileMetaEntity> {
         val statement = database.connection.prepareStatement(" select $FILEMETA_TABLE_FIELDS from $FILEMETA_TABLE where snapshot_id = ?")
         statement.setString(1, snapshotId)
 
         val rs = statement.executeQuery()
         val results = mutableListOf<FileMetaEntity>()
-        while (rs.next()){
+        while (rs.next()) {
             results.add(FileMetaEntity.fromResultSet(rs))
         }
         return results.toList()

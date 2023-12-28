@@ -16,17 +16,17 @@ class FileRepositoryTests {
     val testHarness = TestHarness()
 
     @BeforeEach
-    fun before(){
+    fun before() {
         testHarness.before()
     }
 
     @AfterEach
-    fun after(){
+    fun after() {
         testHarness.after()
     }
 
     @Test
-    fun `can create file in db`(){
+    fun `can create file in db`() {
         val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "hash", 123)
         val fileRepository = FileRepository(testHarness.database)
         val output = fileRepository.insertFileEntity(input)
@@ -38,7 +38,7 @@ class FileRepositoryTests {
     }
 
     @Test
-    fun `can retrieve file by id`(){
+    fun `can retrieve file by id`() {
         val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "hash", 0)
         val fileRepository = FileRepository(testHarness.database)
         val saved = fileRepository.insertFileEntity(input)
@@ -48,8 +48,8 @@ class FileRepositoryTests {
     }
 
     @Test
-    fun `can retrieve file by hash`(){
-        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(),  "hash", 0)
+    fun `can retrieve file by hash`() {
+        val input = FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "hash", 0)
         val fileRepository = FileRepository(testHarness.database)
         val saved = fileRepository.insertFileEntity(input)
         val result = fileRepository.getFileEntityByMd5Hash(saved.md5Hash)!!
@@ -58,13 +58,13 @@ class FileRepositoryTests {
     }
 
     @Test
-    fun `return null when no file found in db by id`(){
+    fun `return null when no file found in db by id`() {
         val fileRepository = FileRepository(testHarness.database)
         assertTrue(fileRepository.getFileEntityById("blah") == null)
     }
 
     @Test
-    fun `return null when no file found in db by hash`(){
+    fun `return null when no file found in db by hash`() {
         val fileRepository = FileRepository(testHarness.database)
         assertTrue(fileRepository.getFileEntityByMd5Hash("blah") == null)
     }
