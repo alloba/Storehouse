@@ -2,7 +2,6 @@ package destination.local
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.assertThrows
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createTempDirectory
@@ -36,7 +35,7 @@ class LocalArchiveDestinationTests {
         val otherFile = kotlin.io.path.createTempFile(otherDir, "testfile-zzz")
 
         assertTrue(destination.listFiles().isEmpty())
-        destination.copyFile(otherFile, "asdfffff")
+        destination.submitFile(otherFile, "asdfffff")
 
         assertTrue(destination.listFiles().size == 1)
     }

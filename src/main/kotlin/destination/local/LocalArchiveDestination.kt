@@ -3,7 +3,6 @@ package destination.local
 import destination.ArchiveDestination
 import java.io.File
 import java.nio.file.Path
-import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.copyTo
 import kotlin.io.path.isRegularFile
 
@@ -13,16 +12,15 @@ class LocalArchiveDestination(private val config: LocalArchiveDestinationConfig)
      * A file with any path is considered fair game, but the destination that it will be saved to will always be the root directory.
      * Tracking the file is expected to be handled via the file meta -> file relationship within the sqlite database after this point.
      */
-    @OptIn(ExperimentalPathApi::class)
-    override fun copyFile(sourceFilePath: Path, md5Hash: String): Boolean {
+    override fun submitFile(sourceFilePath: Path, md5Hash: String): Boolean {
         val newFilePath = Path.of(config.rootPath.toString() + File.separator + md5Hash)
         sourceFilePath.copyTo(newFilePath)
         return true
     }
 
-    override fun copyFiles(pathHashPairs: List<Pair<Path, String>>, rootParentPath: Path): Boolean {
+    override fun submitFiles(pathHashPairs: List<Pair<Path, String>>, rootParentPath: Path): Boolean {
         pathHashPairs.forEach {
-            copyFile(it.first, it.second)
+            submitFile(it.first, it.second)
         }
         return true
     }
