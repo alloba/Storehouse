@@ -1,4 +1,4 @@
-import config.ConfigModel
+import config.RuntimeConfiguration
 import database.StorehouseDatabase
 import database.repo.ArchiveRepository
 import database.repo.FileMetaRepository
@@ -10,41 +10,29 @@ import java.nio.file.Path
 import kotlin.io.path.isDirectory
 import kotlin.io.path.isReadable
 import kotlin.io.path.isWritable
-import kotlin.io.path.readText
 
 fun main(args: Array<String>) {
-    if (args.size.mod( 2) != 0){
-        throw Exception("Invalid command line args - all options must have an associated value supplied")
-    }
-    val argsMap = args.toList().chunked(2).associate { it[0] to it[1] }
-    val configModel = generateConfigModel(argsMap)
+    val argumentStore = cli.parseArguments(args)
+    val configModel = RuntimeConfiguration.fromFilePath(argumentStore.configFilePath)
     val archiveOperator = generateArchiveOperator(configModel)
-    val (command, commandString) = commands.interpretCommandString(argsMap["command"]?:"")
+    val commandName = argumentStore.commandName
+    val commandVal = argumentStore.commandString
 
-    command.execute(archiveOperator, commandString)
+    val command = commands.retrieveCommand(commandName)
+    command.execute(archiveOperator, commandVal)
 }
 
-fun generateConfigModel(argsMap: Map<String,String>): ConfigModel{
-    val configPath = argsMap["config"] ?: throw Exception("Invalid command line args - must provide a config file path (must be json matching spec)")
-    val configFilePath = Path.of(configPath)
 
-    if (configFilePath.isDirectory() || ! configFilePath.isReadable()){
-        throw Exception("Invalid command line args - interpreted config file path $configFilePath not valid.")
-    }
-
-    return ConfigModel.fromJsonString(configFilePath.readText())
-}
-
-fun generateArchiveOperator(configModel: ConfigModel): ArchiveOperator{
-    val databasePath = Path.of(configModel.databaseLocation)
+fun generateArchiveOperator(runtimeConfiguration: RuntimeConfiguration): ArchiveOperator{
+    val databasePath = Path.of(runtimeConfiguration.databaseLocation)
     if (databasePath.isDirectory() || ! databasePath.isReadable() || ! databasePath.isWritable()){
         throw Exception("Unable to operate with provided database file $databasePath")
     }
     val database = StorehouseDatabase(databasePath.toString())
 
-    val source = when(configModel.sourceType){
+    val source = when(runtimeConfiguration.sourceType){
         "Local" ->  {
-            val sourcePathString = configModel.sourceConfig["path"]?:throw Exception("necessary config option not found for local source config - [path]")
+            val sourcePathString = runtimeConfiguration.sourceConfig["path"]?:throw Exception("necessary config option not found for local source config - [path]")
             val sourcePath = Path.of(sourcePathString)
             if (! sourcePath.isDirectory()){
                 throw Exception("Provided source path [$sourcePath] is not a valid directory")
@@ -53,13 +41,13 @@ fun generateArchiveOperator(configModel: ConfigModel): ArchiveOperator{
             LocalArchiveSource(mapOf("path" to sourcePath.toString()))
         }
         else -> {
-            throw Exception("provided sourceType [${configModel.sourceType}] for storehouse is invalid")
+            throw Exception("provided sourceType [${runtimeConfiguration.sourceType}] for storehouse is invalid")
         }
     }
 
-    val destination = when(configModel.destinationType){
+    val destination = when(runtimeConfiguration.destinationType){
         "Local" -> {
-            val destinationPathString = configModel.sourceConfig["path"]?: throw Exception("necessary config option not found for local destination config - [path]")
+            val destinationPathString = runtimeConfiguration.sourceConfig["path"]?: throw Exception("necessary config option not found for local destination config - [path]")
             val destinationPath = Path.of(destinationPathString)
             if (! destinationPath.isDirectory()){
                 throw Exception("Provided destination path [$destinationPath] is not a valid directory")
@@ -67,7 +55,7 @@ fun generateArchiveOperator(configModel: ConfigModel): ArchiveOperator{
             LocalArchiveDestination(mapOf("path" to destinationPath.toString()))
         }
         else -> {
-            throw Exception("Provided destinationType [${configModel.destinationType}] for storehouse is invalid")
+            throw Exception("Provided destinationType [${runtimeConfiguration.destinationType}] for storehouse is invalid")
         }
     }
 

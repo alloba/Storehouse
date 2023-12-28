@@ -4,20 +4,16 @@ import ArchiveOperator
 import reporting.models.ArchiveOverviewModel
 
 class DisplayArchiveInfoCommand: CommandInterface {
-    override fun execute(archiveOperator: ArchiveOperator, rawCommandString: String): Boolean {
+    override fun execute(archiveOperator: ArchiveOperator, commandOptions: String): Boolean {
 
-        val matchedCommand = (allowedAliases() + name())
-            .firstOrNull { rawCommandString.startsWith(it) }
-            ?: throw Exception("Could not interpret command string for DisplayArchiveInfoCommand")
-        val archiveName = rawCommandString.substringAfter(matchedCommand).trim()
-
+        val archiveName = commandOptions.trim()
         val archive = archiveOperator.getArchiveByName(archiveName)
         println(ArchiveOverviewModel(archive, archiveOperator))
         return true
     }
 
     override fun allowedAliases(): List<String> {
-        return listOf("archive info", "archiveInfo", "displayArchive", "displayArchiveInfo", "da", "DA")
+        return listOf("archiveinfo", "archiveInfo", "displayArchive", "displayArchiveInfo", "da", "DA")
     }
 
     override fun name(): String {

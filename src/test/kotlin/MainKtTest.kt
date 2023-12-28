@@ -1,5 +1,5 @@
 import com.google.gson.Gson
-import config.ConfigModel
+import config.RuntimeConfiguration
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,7 +17,7 @@ class MainKtTest {
     fun before() {
         harness.before()
         configJson = Gson().toJson(
-            ConfigModel(
+            RuntimeConfiguration(
                 databaseLocation = harness.databaseFile.toString(),
                 sourceType = "Local",
                 sourceConfig = mapOf("path" to harness.localArchiveSource.getOptions()["path"]!!), //TODO - really gotta clean up this config stuff.
@@ -42,7 +42,7 @@ class MainKtTest {
 
     @Test
     fun `can execute info display command`(){
-        val args = arrayOf("config", configJsonFilePath.toString(), "command", "DA test")
+        val args = arrayOf("--config", configJsonFilePath.toString(), "--command", "DA", "test")
         harness.archiveOperator.createNewArchive("test", "test archive")
         main(args)
     }
