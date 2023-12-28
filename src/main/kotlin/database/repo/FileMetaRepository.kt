@@ -31,7 +31,7 @@ class FileMetaRepository(val database: StorehouseDatabase) {
         else FileMetaEntity.fromResultSet(rs)
     }
 
-    fun getAllFileMetasForSnapshot(snapshotId: String): List<FileMetaEntity>{
+    fun getFileMetasBySnapshotId(snapshotId: String): List<FileMetaEntity>{
         val statement = database.connection.prepareStatement(" select $FILEMETA_TABLE_FIELDS from $FILEMETA_TABLE where snapshot_id = ?")
         statement.setString(1, snapshotId)
 

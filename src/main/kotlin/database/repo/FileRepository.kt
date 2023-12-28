@@ -36,6 +36,26 @@ class FileRepository(private val database: StorehouseDatabase) {
         else FileEntity.fromResultSet(rs)
     }
 
+    fun getFileEntitiesByArchiveId(archiveId: String): List<FileEntity>{
+        val statement = database.connection.prepareStatement("""
+            select F.id, F.date_created, f.date_updated, F.md5_hash, f.size_bytes
+            from File F
+                join FileMeta FM on F.id = FM.file_id
+                join Snapshot SN on SN.id = FM.snapshot_id
+                join Archive AR on SN.archive_id = AR.id
+            where AR.id = ?
+            group by F.id
+        """.trimIndent())
+        statement.setString(1, archiveId)
+
+        val results = mutableListOf<FileEntity>()
+        val rs = statement.executeQuery()
+        while (rs.next()){
+            results.add(FileEntity.fromResultSet(rs))
+        }
+        return results.toList()
+    }
+
     companion object {
         const val FILE_TABLE = "File"
         const val FILE_TABLE_FIELDS = " id, date_created, date_updated, md5_hash, size_bytes "

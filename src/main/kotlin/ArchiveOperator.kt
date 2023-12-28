@@ -37,6 +37,15 @@ class ArchiveOperator(
             )
         )
     }
+    fun createNewSnapshot(archive: ArchiveEntity, files: List<Path>, description: String = ""): SnapshotEntity {
+        val snapshotEntity = snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), description, archive.id))
+
+        logger.info("Submitting ${files.size} files for Archive: ${archive.name} - Snapshot: ${snapshotEntity.id}")
+        val fileMetas = submitToSnapshot(snapshotEntity, files)
+
+        archiveRepository.updateArchiveEntity(archive) //set new timestamp
+        return snapshotEntity
+    }
 
     fun getArchiveByName(archiveName: String): ArchiveEntity {
         return archiveRepository.getArchiveEntityByName(archiveName) ?: throw Exception("Archive with name [$archiveName] not found.")
@@ -46,14 +55,14 @@ class ArchiveOperator(
         return snapshotRepository.getSnapshotsForArchiveId(archiveEntity.id)
     }
 
-    fun createNewSnapshot(archive: ArchiveEntity, files: List<Path>, description: String = ""): SnapshotEntity {
-        val snapshotEntity = snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), description, archive.id))
-
-        logger.info("Submitting ${files.size} files for Archive: ${archive.name} - Snapshot: ${snapshotEntity.id}")
-        val fileMetas = submitToSnapshot(snapshotEntity, files)
-
-        return snapshotEntity
+    fun getFilesByArchive(archiveEntity: ArchiveEntity): List<FileEntity> {
+        return fileRepository.getFileEntitiesByArchiveId(archiveEntity.id)
     }
+
+    fun getFileMetasBySnapshotId(snapshotId: String): List<FileMetaEntity> {
+        return fileMetaRepository.getFileMetasBySnapshotId(snapshotId)
+    }
+
 
     private fun submitToSnapshot(snapshot: SnapshotEntity, objects: List<Path>): List<FileMetaEntity> {
         val filemetas = mutableListOf<FileMetaEntity>()
