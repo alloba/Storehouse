@@ -20,9 +20,9 @@ class MainKtTest {
             ConfigModel(
                 databaseLocation = harness.databaseFile.toString(),
                 sourceType = "Local",
-                sourceConfig = mapOf("path" to harness.localArchiveSource.getConfig().getConfig()["path"]!!), //TODO - really gotta clean up this config stuff.
+                sourceConfig = mapOf("path" to harness.localArchiveSource.getOptions()["path"]!!), //TODO - really gotta clean up this config stuff.
                 destinationType = "Local",
-                destinationConfig = mapOf("path" to harness.localArchiveDestination.getConfig().getConfig()["path"]!!),
+                destinationConfig = mapOf("path" to harness.localArchiveDestination.getOptions()["path"]!!),
             )
         )
         configJsonFilePath = kotlin.io.path.createTempFile(harness.rootTestDirectory, "configurationfile.json")

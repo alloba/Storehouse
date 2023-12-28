@@ -1,16 +1,24 @@
 package source.local
 
 import source.ArchiveSource
-import source.ArchiveSourceConfig
 import java.nio.file.Path
 import java.security.MessageDigest
 import kotlin.io.path.fileSize
+import kotlin.io.path.isDirectory
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.readBytes
 
-class LocalArchiveSource(private val config: LocalArchiveSourceConfig) : ArchiveSource(config) {
+class LocalArchiveSource(options: Map<String, String>) : ArchiveSource(options) {
+    private val filePath: Path
+    init {
+        require(options.containsKey("path")) {"LocalArchiveSource options must contain a path value"}
+        val filePathString = options["path"]?: throw IllegalArgumentException("LocalArchiveSource path option must be populated")
+        filePath = Path.of(filePathString)
+        require(Path.of(filePathString).isDirectory()) {"LocalArchiveSource path [$filePathString] must be a valid directory"}
+
+    }
     override fun getAllFiles(): List<Path> {
-        return config.filepath.toFile()
+        return filePath.toFile()
             .walkTopDown()
             .filter { it.isFile }
             .map { it.toPath() }
@@ -32,9 +40,5 @@ class LocalArchiveSource(private val config: LocalArchiveSourceConfig) : Archive
         }
 
         return filePath.fileSize()
-    }
-
-    override fun getConfig(): ArchiveSourceConfig {
-        return config
     }
 }

@@ -39,7 +39,7 @@ class LocalArchiveSourceTests {
 
         val childFile = Path.of(sourcePath.toString() + File.separator + "folder" + File.separator + "childFile.tmp").createParentDirectories()
         childFile.writeText("placeholder")
-        val localArchiveSource = LocalArchiveSource(LocalArchiveSourceConfig(Path.of(tempDirectoryPath)))
+        val localArchiveSource = LocalArchiveSource(mapOf("path" to tempDirectoryPath))
         val res = localArchiveSource.getAllFiles()
 
         assertEquals(2, res.size)
@@ -57,7 +57,7 @@ class LocalArchiveSourceTests {
         file3.writeText("textå¬ºª")
         file4.writeText("textå¬ºª")
 
-        val localArchiveSource = LocalArchiveSource(LocalArchiveSourceConfig(Path.of(tempDirectoryPath)))
+        val localArchiveSource = LocalArchiveSource(mapOf("path" to tempDirectoryPath))
 
         assertEquals(localArchiveSource.computeMd5Hash(file1), localArchiveSource.computeMd5Hash(file2))
         assertEquals(localArchiveSource.computeMd5Hash(file3), localArchiveSource.computeMd5Hash(file4))
@@ -66,7 +66,7 @@ class LocalArchiveSourceTests {
 
     @Test
     fun `file hash will not be computed if a path does not point to a regular file`() {
-        val localArchiveSource = LocalArchiveSource(LocalArchiveSourceConfig(Path.of(tempDirectoryPath)))
+        val localArchiveSource = LocalArchiveSource(mapOf("path" to tempDirectoryPath))
         Path.of(tempDirectoryPath + File.separator + "tempfile.tmp").createFile()
         assertThrows<Exception> { localArchiveSource.computeMd5Hash(Path.of(tempDirectoryPath)) }
     }

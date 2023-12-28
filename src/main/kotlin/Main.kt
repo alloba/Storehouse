@@ -5,9 +5,7 @@ import database.repo.FileMetaRepository
 import database.repo.FileRepository
 import database.repo.SnapshotRepository
 import destination.local.LocalArchiveDestination
-import destination.local.LocalArchiveDestinationConfig
 import source.local.LocalArchiveSource
-import source.local.LocalArchiveSourceConfig
 import java.nio.file.Path
 import kotlin.io.path.isDirectory
 import kotlin.io.path.isReadable
@@ -52,7 +50,7 @@ fun generateArchiveOperator(configModel: ConfigModel): ArchiveOperator{
                 throw Exception("Provided source path [$sourcePath] is not a valid directory")
             }
 
-            LocalArchiveSource(LocalArchiveSourceConfig(sourcePath))
+            LocalArchiveSource(mapOf("path" to sourcePath.toString()))
         }
         else -> {
             throw Exception("provided sourceType [${configModel.sourceType}] for storehouse is invalid")
@@ -66,7 +64,7 @@ fun generateArchiveOperator(configModel: ConfigModel): ArchiveOperator{
             if (! destinationPath.isDirectory()){
                 throw Exception("Provided destination path [$destinationPath] is not a valid directory")
             }
-            LocalArchiveDestination(LocalArchiveDestinationConfig(destinationPath))
+            LocalArchiveDestination(mapOf("path" to destinationPath.toString()))
         }
         else -> {
             throw Exception("Provided destinationType [${configModel.destinationType}] for storehouse is invalid")

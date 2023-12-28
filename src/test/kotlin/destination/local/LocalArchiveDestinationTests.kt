@@ -25,12 +25,12 @@ class LocalArchiveDestinationTests {
 
     @Test
     fun `can create destination object`() {
-        LocalArchiveDestination(LocalArchiveDestinationConfig(Path.of(tempDirPath)))
+        LocalArchiveDestination(mapOf("path" to tempDirPath))
     }
 
     @Test
     fun `can copy a file from other local path`() {
-        val destination = LocalArchiveDestination(LocalArchiveDestinationConfig(Path.of(tempDirPath)))
+        val destination = LocalArchiveDestination(mapOf("path" to tempDirPath))
         val otherDir = createTempDirectory("storehouse-localarchive-testing")
         val otherFile = kotlin.io.path.createTempFile(otherDir, "testfile-zzz")
 

@@ -1,20 +1,28 @@
 package destination.local
 
 import destination.ArchiveDestination
-import destination.ArchiveDestinationConfig
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.copyTo
+import kotlin.io.path.isDirectory
 import kotlin.io.path.isRegularFile
 
-class LocalArchiveDestination(private val config: LocalArchiveDestinationConfig) : ArchiveDestination(config) {
+class LocalArchiveDestination(options: Map<String, String>) : ArchiveDestination(options) {
+    private val filePath: Path
+    init {
+        require(options.containsKey("path")) {"LocalArchiveDestination options must contain a path"}
+        val filePathString = options["path"]?: throw IllegalArgumentException("LocalArchiveDestination path option must contain a value")
+        filePath = Path.of(filePathString)
+        require(filePath.isDirectory()) {"LocalArchiveDestination provided path [$filePathString] must be a valid directory"}
+    }
+
     /**
      * Copy the given file object to the destination path defined in the destination configuration.
      * A file with any path is considered fair game, but the destination that it will be saved to will always be the root directory.
      * Tracking the file is expected to be handled via the file meta -> file relationship within the sqlite database after this point.
      */
     override fun submitFile(sourceFilePath: Path, md5Hash: String): Boolean {
-        val newFilePath = Path.of(config.rootPath.toString() + File.separator + md5Hash)
+        val newFilePath = Path.of(filePath.toString() + File.separator + md5Hash)
         sourceFilePath.copyTo(newFilePath)
         return true
     }
@@ -27,7 +35,7 @@ class LocalArchiveDestination(private val config: LocalArchiveDestinationConfig)
     }
 
     override fun listFiles(): List<Path> {
-        return config.rootPath.toFile()
+        return filePath.toFile()
             .walkTopDown()
             .filter { it.isFile }
             .map { it.toPath() }
@@ -35,13 +43,9 @@ class LocalArchiveDestination(private val config: LocalArchiveDestinationConfig)
     }
 
     override fun retrieveFileByHash(hash: String): Path? {
-        val target = Path.of(config.rootPath.toString() + File.separator + hash)
+        val target = Path.of(filePath.toString() + File.separator + hash)
 
         return if (target.isRegularFile()) target
         else null
-    }
-
-    override fun getConfig(): ArchiveDestinationConfig {
-        return config
     }
 }
