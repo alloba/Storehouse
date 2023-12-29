@@ -14,11 +14,15 @@ class DisplayArchiveInfoCommand : CommandInterface {
         }
 
         return try {
+            logger.info("Executing command: ${name()}")
+
             val archive = archiveManager.getArchiveByName(archiveName)
             println(ArchiveOverviewModel(archive, archiveManager))
+
+            logger.info("Command ${name()} success")
             CommandResult(true)
         } catch (e: Exception) {
-            logger.error("unable to complete command operation", e)
+            logger.error("Failure to complete command: ${name()}", e)
             CommandResult(false, e.message ?: "failed to complete command.")
         }
     }
