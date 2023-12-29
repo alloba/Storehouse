@@ -5,11 +5,13 @@ import source.local.LocalArchiveSource
 
 fun main(args: Array<String>) {
     val argumentStore = cli.parseArguments(args)
-    val runtimeConfiguration = RuntimeConfiguration.fromFilePath(argumentStore.configFilePath)
+    val runtimeConfiguration = RuntimeConfiguration.fromFilePath(argumentStore.configFilePath) //in the future a runtime config could be built in another way? all args/remote source
     val archiveManager = generateArchiveManager(runtimeConfiguration)
 
-    val commandName = argumentStore.commandName
-    val commandVal = argumentStore.commandString
+    val commandBlock = argumentStore.commandBlock
+    val commandName = commandBlock.substringBefore(" ")
+    val commandVal = if (commandBlock.contains(" ")) commandBlock.substringAfter(" ") else ""
+
     val command = commands.retrieveCommand(commandName)
 
     command.execute(archiveManager, commandVal)

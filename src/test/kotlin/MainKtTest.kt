@@ -20,7 +20,7 @@ class MainKtTest {
             RuntimeConfiguration(
                 databaseLocation = harness.databaseFile.toString(),
                 sourceType = "Local",
-                sourceConfig = mapOf("path" to harness.localArchiveSource.getOptions()["path"]!!), //TODO - really gotta clean up this config stuff.
+                sourceConfig = mapOf("path" to harness.localArchiveSource.getOptions()["path"]!!),
                 destinationType = "Local",
                 destinationConfig = mapOf("path" to harness.localArchiveDestination.getOptions()["path"]!!),
             )
