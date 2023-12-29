@@ -1,6 +1,6 @@
 package cli
 
-fun parseArguments(args: Array<String>): CliArgumentsModel {
+fun parseArguments(args: Array<String>): CliArguments {
     val organizedArgs = createArgMap(args)
     return createStoreFromMap(organizedArgs)
 }
@@ -46,10 +46,10 @@ private fun createArgMap(args: Array<String>): Map<String, String> {
     return parsedArguments.toMap()
 }
 
-private fun createStoreFromMap(argMap: Map<String, String>): CliArgumentsModel {
+private fun createStoreFromMap(argMap: Map<String, String>): CliArguments {
     require(argMap["config"] != null) { "Missing required CLI argument [config]" }
     require(argMap["command"] != null) { "Missing required CLI argument [command]" }
-    return CliArgumentsModel(
+    return CliArguments(
         configFilePath = argMap["config"] ?: "",
         commandName = argMap["command"] ?: "",
         commandString = argMap["remainder"] ?: "",

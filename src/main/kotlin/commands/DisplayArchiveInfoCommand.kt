@@ -1,21 +1,21 @@
 package commands
 
-import ArchiveOperator
+import ArchiveManager
 import org.slf4j.LoggerFactory
 import reporting.models.ArchiveOverviewModel
 
 class DisplayArchiveInfoCommand : CommandInterface {
     val logger = LoggerFactory.getLogger(this::class.java)
 
-    override fun execute(archiveOperator: ArchiveOperator, commandOptions: String): CommandResult {
+    override fun execute(archiveManager: ArchiveManager, commandOptions: String): CommandResult {
         val archiveName = commandOptions.trim()
         if (archiveName.isBlank()){
             return CommandResult(false, "No archive name provided")
         }
 
         return try{
-            val archive = archiveOperator.getArchiveByName(archiveName)
-            println(ArchiveOverviewModel(archive, archiveOperator))
+            val archive = archiveManager.getArchiveByName(archiveName)
+            println(ArchiveOverviewModel(archive, archiveManager))
             CommandResult(true)
         } catch (e: Exception){
             logger.error("unable to complete command operation", e)

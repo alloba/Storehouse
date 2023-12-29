@@ -4,7 +4,7 @@ import java.nio.file.Path
 import kotlin.io.path.isDirectory
 import kotlin.io.path.isReadable
 
-data class CliArgumentsModel(
+data class CliArguments(
     val configFilePath: String,  // eventually this would be an optional field, if a different source were to be provided.
     val commandName: String,
     val commandString: String

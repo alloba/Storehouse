@@ -16,7 +16,7 @@ import kotlin.io.path.extension
 import kotlin.io.path.name
 import kotlin.io.path.pathString
 
-class ArchiveOperator(
+class ArchiveManager(
     val source: ArchiveSource,
     val destination: ArchiveDestination,
     val archiveRepository: ArchiveRepository,

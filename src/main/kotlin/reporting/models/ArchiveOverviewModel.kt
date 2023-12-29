@@ -1,15 +1,15 @@
 package reporting.models
 
-import ArchiveOperator
+import ArchiveManager
 import database.entities.ArchiveEntity
 
-class ArchiveOverviewModel(private val archiveEntity: ArchiveEntity, private val archiveOperator: ArchiveOperator) {
+class ArchiveOverviewModel(private val archiveEntity: ArchiveEntity, private val archiveManager: ArchiveManager) {
 
     override fun toString(): String {
-        val archiveSnapshots = archiveOperator.getSnapshotsByArchive(archiveEntity)
+        val archiveSnapshots = archiveManager.getSnapshotsByArchive(archiveEntity)
         val mostRecentSnapshot = archiveSnapshots.maxByOrNull { it.dateCreated }
-        val recentSnapshotFileMetas = archiveOperator.getFileMetasBySnapshotId(mostRecentSnapshot?.id ?: "")
-        val archiveFiles = archiveOperator.getFilesByArchive(archiveEntity)
+        val recentSnapshotFileMetas = archiveManager.getFileMetasBySnapshotId(mostRecentSnapshot?.id ?: "")
+        val archiveFiles = archiveManager.getFilesByArchive(archiveEntity)
 
         return """
             Archive ${archiveEntity.name}

@@ -31,12 +31,12 @@ class ArchiveOverviewTests {
         additionalSnapshotFiles.forEach { it.writeText(it.toString()) }
 
 
-        val archive = harness.archiveOperator.createNewArchive("testarchive", "testing")
-        val snapshot1 = harness.archiveOperator.createNewSnapshot(archive, snapshotFiles, "first snap")
-        val snapshot2 = harness.archiveOperator.createNewSnapshot(archive, additionalSnapshotFiles, "second snap")
-        val snapshot3 = harness.archiveOperator.createNewSnapshot(archive, snapshotFiles + additionalSnapshotFiles, "third snap")
+        val archive = harness.archiveManager.createNewArchive("testarchive", "testing")
+        val snapshot1 = harness.archiveManager.createNewSnapshot(archive, snapshotFiles, "first snap")
+        val snapshot2 = harness.archiveManager.createNewSnapshot(archive, additionalSnapshotFiles, "second snap")
+        val snapshot3 = harness.archiveManager.createNewSnapshot(archive, snapshotFiles + additionalSnapshotFiles, "third snap")
 
-        val report = ArchiveOverviewModel(archive, harness.archiveOperator).toString()
+        val report = ArchiveOverviewModel(archive, harness.archiveManager).toString()
 
         assertTrue(report.lowercase().contains("Archive ${archive.name}".lowercase()))
         assertTrue(report.lowercase().contains("Last Snapshot Created: ${snapshot3.dateCreated}".lowercase()))

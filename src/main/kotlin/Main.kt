@@ -13,17 +13,18 @@ import kotlin.io.path.isWritable
 
 fun main(args: Array<String>) {
     val argumentStore = cli.parseArguments(args)
-    val configModel = RuntimeConfiguration.fromFilePath(argumentStore.configFilePath)
-    val archiveOperator = generateArchiveOperator(configModel)
+    val runtimeConfiguration = RuntimeConfiguration.fromFilePath(argumentStore.configFilePath)
+    val archiveManager = generateArchiveManager(runtimeConfiguration)
+
     val commandName = argumentStore.commandName
     val commandVal = argumentStore.commandString
-
     val command = commands.retrieveCommand(commandName)
-    command.execute(archiveOperator, commandVal)
+
+    command.execute(archiveManager, commandVal)
 }
 
 
-fun generateArchiveOperator(runtimeConfiguration: RuntimeConfiguration): ArchiveOperator {
+fun generateArchiveManager(runtimeConfiguration: RuntimeConfiguration): ArchiveManager {
     val databasePath = Path.of(runtimeConfiguration.databaseLocation)
     if (databasePath.isDirectory() || !databasePath.isReadable() || !databasePath.isWritable()) {
         throw Exception("Unable to operate with provided database file $databasePath")
@@ -66,5 +67,5 @@ fun generateArchiveOperator(runtimeConfiguration: RuntimeConfiguration): Archive
     val fileRepository = FileRepository(database)
     val fileMetaRepository = FileMetaRepository(database)
 
-    return ArchiveOperator(source, destination, archiveRepository, snapshotRepository, fileRepository, fileMetaRepository)
+    return ArchiveManager(source, destination, archiveRepository, snapshotRepository, fileRepository, fileMetaRepository)
 }

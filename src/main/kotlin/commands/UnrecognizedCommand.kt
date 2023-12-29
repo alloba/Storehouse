@@ -1,9 +1,9 @@
 package commands
 
-import ArchiveOperator
+import ArchiveManager
 
 class UnrecognizedCommand : CommandInterface {
-    override fun execute(archiveOperator: ArchiveOperator, commandOptions: String): CommandResult {
+    override fun execute(archiveManager: ArchiveManager, commandOptions: String): CommandResult {
         return CommandResult(false, "No recognized command found - no action taken")
     }
 

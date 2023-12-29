@@ -5,7 +5,7 @@ import kotlin.io.path.writeText
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ArchiveOperator_FileOperationsTests {
+class ArchiveManager_FileOperationsTests {
     val harness = TestHarness()
 
     @BeforeEach
@@ -27,15 +27,15 @@ class ArchiveOperator_FileOperationsTests {
         file2.writeText("this is file2")
         file3.writeText("this is file3")
 
-        val archive = harness.archiveOperator.createNewArchive("archive name here", "for testing")
-        val snapshotEntity = harness.archiveOperator.createNewSnapshot(archive, listOf(file1, file2, file3))
+        val archive = harness.archiveManager.createNewArchive("archive name here", "for testing")
+        val snapshotEntity = harness.archiveManager.createNewSnapshot(archive, listOf(file1, file2, file3))
 
-        val persistedFileMetaEntities = harness.archiveOperator.fileMetaRepository.getFileMetasBySnapshotId(snapshotEntity.id)
+        val persistedFileMetaEntities = harness.archiveManager.fileMetaRepository.getFileMetasBySnapshotId(snapshotEntity.id)
         assertEquals(3, persistedFileMetaEntities.size)
 
         val persistedFileEntities = persistedFileMetaEntities
             .map { it.fileId }
-            .map { harness.archiveOperator.fileRepository.getFileEntityById(it) }
+            .map { harness.archiveManager.fileRepository.getFileEntityById(it) }
             .mapNotNull { it?.md5Hash }
 
         val archivedTextFiles = persistedFileEntities.map {
