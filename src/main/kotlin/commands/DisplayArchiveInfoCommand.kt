@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 import reporting.models.ArchiveOverviewModel
 
 class DisplayArchiveInfoCommand : CommandInterface {
-    val logger = LoggerFactory.getLogger(this::class.java)
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun execute(archiveManager: ArchiveManager, commandOptions: String): CommandResult {
         val archiveName = commandOptions.trim()
