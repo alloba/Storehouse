@@ -21,7 +21,7 @@ fun generateArchiveManager(runtimeConfiguration: RuntimeConfiguration): ArchiveM
 
     val source = when (runtimeConfiguration.sourceType) {
         "Local" -> {
-            LocalArchiveSource(mapOf("path" to (runtimeConfiguration.sourceConfig["path"]?:"")))
+            LocalArchiveSource(mapOf("path" to (runtimeConfiguration.sourceConfig["path"] ?: "")))
         }
 
         else -> {
@@ -31,7 +31,7 @@ fun generateArchiveManager(runtimeConfiguration: RuntimeConfiguration): ArchiveM
 
     val destination = when (runtimeConfiguration.destinationType) {
         "Local" -> {
-            LocalArchiveDestination(mapOf("path" to (runtimeConfiguration.destinationConfig["path"]?:"")))
+            LocalArchiveDestination(mapOf("path" to (runtimeConfiguration.destinationConfig["path"] ?: "")))
         }
 
         else -> {

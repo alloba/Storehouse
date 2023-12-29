@@ -6,6 +6,6 @@ data class CommandResult(
 ) {
     init {
         if (!success)
-            require(message.isNotBlank()){"Failed command results must contain a non-blank status message"}
+            require(message.isNotBlank()) { "Failed command results must contain a non-blank status message" }
     }
 }

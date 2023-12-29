@@ -26,7 +26,7 @@ class StorehouseDatabase(private val databasePath: String) {
     val connection: Connection
 
     init {
-        require(Path.of(databasePath).isReadable() && Path.of(databasePath).isWritable() && ! Path.of(databasePath).isDirectory()) {"Storehouse database file $databasePath must be a writeable file"}
+        require(Path.of(databasePath).isReadable() && Path.of(databasePath).isWritable() && !Path.of(databasePath).isDirectory()) { "Storehouse database file $databasePath must be a writeable file" }
         connection = getSqliteConnection(databasePath)
         bootstrapDatabase()
         performMigrations()
