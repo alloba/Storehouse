@@ -38,10 +38,10 @@ class FileMetaRepositoryTests {
 
     @Test
     fun `can insert filemeta into db with dependencies`() {
-        val inputArchive = testHarness.archiveManager.archiveRepository.insertArchiveEntity(ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "name", "desc"))
+        val inputArchive = testHarness.archiveRepository.insertArchiveEntity(ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "name", "desc"))
         val inputSnapshot =
-            testHarness.archiveManager.snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "desc", inputArchive.id))
-        val inputFile = testHarness.archiveManager.fileRepository.insertFileEntity(FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "hash", 0))
+            testHarness.snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "desc", inputArchive.id))
+        val inputFile = testHarness.fileRepository.insertFileEntity(FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "hash", 0))
 
         val input = FileMetaEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "snappath", "", "", inputFile.id, inputSnapshot.id)
         val output = FileMetaRepository(testHarness.database).insertFileMeta(input)
@@ -56,20 +56,20 @@ class FileMetaRepositoryTests {
 
     @Test
     fun `can get filemeta from db`() {
-        val inputArchive = testHarness.archiveManager.archiveRepository.insertArchiveEntity(ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "name", "desc"))
+        val inputArchive = testHarness.archiveRepository.insertArchiveEntity(ArchiveEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "name", "desc"))
         val inputSnapshot =
-            testHarness.archiveManager.snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "desc", inputArchive.id))
-        val inputFile = testHarness.archiveManager.fileRepository.insertFileEntity(FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "hash", 0))
+            testHarness.snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "desc", inputArchive.id))
+        val inputFile = testHarness.fileRepository.insertFileEntity(FileEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "hash", 0))
 
         val input1 = FileMetaEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), "snappath", "", "", inputFile.id, inputSnapshot.id)
-        val output1 = testHarness.archiveManager.fileMetaRepository.insertFileMeta(input1)
-        val output2 = testHarness.archiveManager.fileMetaRepository.getFileMetaById(output1.id)!!
+        val output1 = testHarness.fileMetaRepository.insertFileMeta(input1)
+        val output2 = testHarness.fileMetaRepository.getFileMetaById(output1.id)!!
 
         assertEquals(output1, output2)
     }
 
     @Test
     fun `return null if no matching id found in db`() {
-        assertNull(testHarness.archiveManager.fileMetaRepository.getFileMetaById("blah"))
+        assertNull(testHarness.fileMetaRepository.getFileMetaById("blah"))
     }
 }

@@ -58,12 +58,9 @@ class ArchiveManager_BasicTests {
 
     private fun createArchiveManager(testHarness: TestHarness): ArchiveManager {
         return ArchiveManager(
+            testHarness.database,
             testHarness.localArchiveSource,
             testHarness.localArchiveDestination,
-            ArchiveRepository(testHarness.database),
-            SnapshotRepository(testHarness.database),
-            FileRepository(testHarness.database),
-            FileMetaRepository(testHarness.database)
         )
     }
 }

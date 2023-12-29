@@ -30,12 +30,12 @@ class ArchiveManager_FileOperationsTests {
         val archive = harness.archiveManager.createNewArchive("archive name here", "for testing")
         val snapshotEntity = harness.archiveManager.createNewSnapshot(archive, listOf(file1, file2, file3))
 
-        val persistedFileMetaEntities = harness.archiveManager.fileMetaRepository.getFileMetasBySnapshotId(snapshotEntity.id)
+        val persistedFileMetaEntities = harness.fileMetaRepository.getFileMetasBySnapshotId(snapshotEntity.id)
         assertEquals(3, persistedFileMetaEntities.size)
 
         val persistedFileEntities = persistedFileMetaEntities
             .map { it.fileId }
-            .map { harness.archiveManager.fileRepository.getFileEntityById(it) }
+            .map { harness.fileRepository.getFileEntityById(it) }
             .mapNotNull { it?.md5Hash }
 
         val archivedTextFiles = persistedFileEntities.map {

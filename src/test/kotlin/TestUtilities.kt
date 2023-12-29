@@ -17,6 +17,10 @@ class TestHarness {
     lateinit var database: StorehouseDatabase
     lateinit var localArchiveSource: LocalArchiveSource
     lateinit var localArchiveDestination: LocalArchiveDestination
+    lateinit var archiveRepository: ArchiveRepository
+    lateinit var snapshotRepository: SnapshotRepository
+    lateinit var fileRepository: FileRepository
+    lateinit var fileMetaRepository: FileMetaRepository
     lateinit var archiveManager: ArchiveManager
 
     fun before() {
@@ -25,13 +29,14 @@ class TestHarness {
         database = StorehouseDatabase(databaseFile.toString())
         localArchiveSource = LocalArchiveSource(mapOf("path" to createTempDirectory(rootTestDirectory, "localArchiveSource").toString()))
         localArchiveDestination = LocalArchiveDestination(mapOf("path" to createTempDirectory(rootTestDirectory, "localArchiveDestination").toString()))
+        archiveRepository = ArchiveRepository(database)
+        snapshotRepository = SnapshotRepository(database)
+        fileRepository = FileRepository(database)
+        fileMetaRepository = FileMetaRepository(database)
         archiveManager = ArchiveManager(
+            database = database,
             source = localArchiveSource,
             destination = localArchiveDestination,
-            archiveRepository = ArchiveRepository(database),
-            snapshotRepository = SnapshotRepository(database),
-            fileRepository = FileRepository(database),
-            fileMetaRepository = FileMetaRepository(database)
         )
     }
 

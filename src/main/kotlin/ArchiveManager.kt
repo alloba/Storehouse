@@ -1,3 +1,4 @@
+import database.StorehouseDatabase
 import database.entities.ArchiveEntity
 import database.entities.FileEntity
 import database.entities.FileMetaEntity
@@ -17,14 +18,16 @@ import kotlin.io.path.name
 import kotlin.io.path.pathString
 
 class ArchiveManager(
+    val database: StorehouseDatabase,
     val source: ArchiveSource,
     val destination: ArchiveDestination,
-    val archiveRepository: ArchiveRepository,
-    val snapshotRepository: SnapshotRepository,
-    val fileRepository: FileRepository,
-    val fileMetaRepository: FileMetaRepository
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
+    private val archiveRepository = ArchiveRepository(database)
+    private val snapshotRepository = SnapshotRepository(database)
+    private val fileRepository = FileRepository(database)
+    private val fileMetaRepository = FileMetaRepository(database)
+
     fun createNewArchive(archiveName: String, archiveDescription: String): ArchiveEntity {
         logger.info("Creating new archive with name: $archiveName")
         return archiveRepository.insertArchiveEntity(

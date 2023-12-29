@@ -16,7 +16,6 @@ class LocalArchiveSource(options: Map<String, String>) : ArchiveSource(options) 
         val filePathString = options["path"] ?: throw IllegalArgumentException("LocalArchiveSource path option must be populated")
         filePath = Path.of(filePathString)
         require(Path.of(filePathString).isDirectory()) { "LocalArchiveSource path [$filePathString] must be a valid directory" }
-
     }
 
     override fun getAllFiles(): List<Path> {
