@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import kotlin.io.path.createTempDirectory
 import kotlin.io.path.writeText
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -20,15 +21,16 @@ class ArchiveManager_FileOperationsTests {
 
     @Test
     fun `multiple files can be submitted to a snapshot and then will persist in the database and in storage, and can be retrieved`() {
-        val file1 = kotlin.io.path.createTempFile("storehouse-testing-file1")
-        val file2 = kotlin.io.path.createTempFile("storehouse-testing-file2")
-        val file3 = kotlin.io.path.createTempFile("storehouse-testing-file1")
+        val tempdir = createTempDirectory(harness.rootTestDirectory, "subtestdir")
+        val file1 = kotlin.io.path.createTempFile(tempdir, "storehouse-testing-file1")
+        val file2 = kotlin.io.path.createTempFile(tempdir, "storehouse-testing-file2")
+        val file3 = kotlin.io.path.createTempFile(tempdir, "storehouse-testing-file1")
         file1.writeText("this is file1")
         file2.writeText("this is file2")
         file3.writeText("this is file3")
 
         val archive = harness.archiveManager.createNewArchive("archive name here", "for testing")
-        val snapshotEntity = harness.archiveManager.createNewSnapshot(archive, listOf(file1, file2, file3))
+        val snapshotEntity = harness.archiveManager.createNewSnapshot(archive, tempdir)
 
         val persistedFileMetaEntities = harness.fileMetaRepository.getFileMetasBySnapshotId(snapshotEntity.id)
         assertEquals(3, persistedFileMetaEntities.size)

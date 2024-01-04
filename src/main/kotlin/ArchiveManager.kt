@@ -14,6 +14,7 @@ import java.nio.file.Path
 import java.time.OffsetDateTime
 import java.util.*
 import kotlin.io.path.extension
+import kotlin.io.path.isDirectory
 import kotlin.io.path.name
 import kotlin.io.path.pathString
 
@@ -41,11 +42,17 @@ class ArchiveManager(
         )
     }
 
-    fun createNewSnapshot(archive: ArchiveEntity, files: List<Path>, description: String = ""): SnapshotEntity {
+    fun createNewSnapshot(archive: ArchiveEntity, rootPath: Path, description: String = ""): SnapshotEntity {
+        require(rootPath.isDirectory() ){"Path submitted for snapshots must be a directory. Archive: ${archive.name}"}
         val snapshotEntity = snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), description, archive.id))
+        val sourceFiles = rootPath.toFile()
+            .walkTopDown()
+            .filter { it.isFile }
+            .map { it.toPath() }
+            .toList()
 
-        logger.info("Submitting ${files.size} files for Archive: ${archive.name} - Snapshot: ${snapshotEntity.id}")
-        val fileMetas = submitToSnapshot(snapshotEntity, files)
+        logger.info("Submitting ${sourceFiles.size} files for Archive: ${archive.name} - Snapshot: ${snapshotEntity.id}")
+        val fileMetas = submitToSnapshot(snapshotEntity, sourceFiles)
 
         archiveRepository.updateArchiveEntity(archive) //set new timestamp
         return snapshotEntity
@@ -66,7 +73,6 @@ class ArchiveManager(
     fun getFileMetasBySnapshotId(snapshotId: String): List<FileMetaEntity> {
         return fileMetaRepository.getFileMetasBySnapshotId(snapshotId)
     }
-
 
     private fun submitToSnapshot(snapshot: SnapshotEntity, objects: List<Path>): List<FileMetaEntity> {
         val filemetas = mutableListOf<FileMetaEntity>()

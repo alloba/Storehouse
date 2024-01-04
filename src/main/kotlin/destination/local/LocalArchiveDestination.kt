@@ -23,6 +23,8 @@ class LocalArchiveDestination(options: Map<String, String>) : ArchiveDestination
      * Tracking the file is expected to be handled via the file meta -> file relationship within the sqlite database after this point.
      */
     override fun submitFile(sourceFilePath: Path, md5Hash: String): Boolean {
+        require(!sourceFilePath.isDirectory()){ "File [$sourceFilePath] cannot be a directory"}
+
         val newFilePath = Path.of(filePath.toString() + File.separator + md5Hash)
         sourceFilePath.copyTo(newFilePath)
         return true
