@@ -29,7 +29,7 @@ class CreateSnapshotCommandTests {
         tempFiles.forEach { it.writeText(it.toString()) }
 
         val testArchive = harness.archiveManager.createNewArchive("testarchive", "testarchive")
-        val commandResult = CreateSnapshotCommand().execute(harness.archiveManager, "testarchive ${harness.rootTestDirectory}")
+        val commandResult = CreateSnapshotCommand().execute(harness.archiveManager, mapOf("archive" to "testarchive", "path" to harness.rootTestDirectory.toString()))
 
         assertEquals(true, commandResult.success)
         assertTrue(harness.archiveManager.getSnapshotsByArchive(testArchive).size == 1)

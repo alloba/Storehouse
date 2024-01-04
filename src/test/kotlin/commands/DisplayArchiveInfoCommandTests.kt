@@ -22,14 +22,14 @@ class DisplayArchiveInfoCommandTests {
 
     @Test
     fun `when command executed for archive that does not exist then return failed status`(){
-        val result = DisplayArchiveInfoCommand().execute(harness.archiveManager, "aaaaaa")
+        val result = DisplayArchiveInfoCommand().execute(harness.archiveManager, mapOf("archive" to "asdf"))
         assertFalse(result.success)
     }
 
     @Test
     fun `when command executed for archive then return success`(){
         harness.archiveManager.createNewArchive("testarchive", "test")
-        val result = DisplayArchiveInfoCommand().execute(harness.archiveManager, "testarchive")
+        val result = DisplayArchiveInfoCommand().execute(harness.archiveManager, mapOf("archive" to "testarchive"))
         assertTrue(result.success)
     }
 }

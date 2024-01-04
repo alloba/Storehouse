@@ -7,8 +7,10 @@ import reporting.models.ArchiveOverviewModel
 class DisplayArchiveInfoCommand : CommandInterface {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    override fun execute(archiveManager: ArchiveManager, commandOptions: String): CommandResult {
-        val archiveName = commandOptions.trim()
+    override fun execute(archiveManager: ArchiveManager, commandOptions: Map<String, String>): CommandResult {
+        require(commandOptions.containsKey("archive")) {"DisplayArchiveInfoCommand missing required argument: [archive]"}
+        val archiveName = commandOptions["archive"]!!.trim()
+
         if (archiveName.isBlank()) {
             return CommandResult(false, "No archive name provided")
         }

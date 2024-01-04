@@ -3,7 +3,7 @@ package commands
 import ArchiveManager
 
 class UnrecognizedCommand : CommandInterface {
-    override fun execute(archiveManager: ArchiveManager, commandOptions: String): CommandResult {
+    override fun execute(archiveManager: ArchiveManager, commandOptions: Map<String, String>): CommandResult {
         return CommandResult(false, "No recognized command found - no action taken")
     }
 

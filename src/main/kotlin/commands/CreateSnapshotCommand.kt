@@ -5,10 +5,12 @@ import java.nio.file.Path
 import kotlin.io.path.isDirectory
 
 class CreateSnapshotCommand: CommandInterface {
-    override fun execute(archiveManager: ArchiveManager, commandOptions: String): CommandResult {
-        require(commandOptions.contains(" ")) {"Command [${name()}] must have two arguments: 1- Archive Name, 2- Path of Snapshot source."}
-        val archiveName = commandOptions.substringBefore(" ").trim()
-        val path = Path.of(commandOptions.substringAfter(" ").trim())
+    override fun execute(archiveManager: ArchiveManager, commandOptions: Map<String, String>): CommandResult {
+        require(commandOptions.containsKey("archive")) { "CreateSnapshotCommand missing required argument: [archive]"}
+        require(commandOptions.containsKey("path")) { "CreateSnapshotCommand missing required argument: [path]"}
+        val archiveName = commandOptions["archive"]!!.trim()
+        val pathVal = commandOptions["path"]!!.trim()
+        val path = Path.of(pathVal)
         require(path.isDirectory()) {"Provided path [$path] must be a valid directory."}
 
         return try {
