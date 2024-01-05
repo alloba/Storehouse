@@ -49,4 +49,19 @@ class ArchiveManager_FileOperationsTests {
         assertTrue(archivedTextFiles.contains("this is file2"))
         assertTrue(archivedTextFiles.contains("this is file3"))
     }
+
+    @Test
+    fun `can restore files from a snapshot`(){
+        val sourceDir = createTempDirectory(harness.rootTestDirectory, "restoretest")
+        val sourceFiles = listOf(1,2,3).map { kotlin.io.path.createTempFile(sourceDir, "testFile_$it") }
+        sourceFiles.forEach { it.writeText(it.toString()) }
+
+        val archive = harness.archiveManager.createNewArchive("testarchive", "test")
+        val snapshot = harness.archiveManager.createNewSnapshot(archive, sourceDir, "test snapshot")
+
+        val targetDir = createTempDirectory(harness.rootTestDirectory, "restoredestination")
+        harness.archiveManager.restoreFromSnapshot(snapshot.id, targetDir)
+
+        assertEquals(3, targetDir.toFile().walkTopDown().filter { it.isFile }.toList().size)
+    }
 }
