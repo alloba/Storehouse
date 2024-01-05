@@ -15,7 +15,19 @@ class UnrecognizedCommand : CommandInterface {
         return "Unrecognized Command"
     }
 
-    override fun generateHelpInfo(): String {
-        return "This command should never be used. This is the fallback command that is returned when no recognized command is passed in from user input."
+    override fun description(): CommandDescription {
+        return CommandDescription("This command should never be used. This is the fallback command that is returned when no recognized command is passed in from user input.")
+    }
+
+    override fun requiredSettings(): Map<String, String> {
+        return emptyMap()
+    }
+
+    override fun optionalSettings(): Map<String, String> {
+        return emptyMap()
+    }
+
+    override fun examples(): List<CommandExample> {
+        return emptyList()
     }
 }

@@ -6,8 +6,10 @@ import kotlin.io.path.isDirectory
 
 class CreateSnapshotCommand : CommandInterface {
     override fun execute(archiveManager: ArchiveManager, commandOptions: Map<String, String>): CommandResult {
-        require(commandOptions.containsKey("archive")) { "CreateSnapshotCommand missing required argument: [archive]" }
-        require(commandOptions.containsKey("path")) { "CreateSnapshotCommand missing required argument: [path]" }
+        requiredSettings().keys.forEach {
+            require(commandOptions.containsKey(it)) {"CreateSnapshot -- missing required setting [$it]"}
+        }
+
         val archiveName = commandOptions["archive"]!!.trim()
         val pathVal = commandOptions["path"]!!.trim()
         val path = Path.of(pathVal)
@@ -30,7 +32,22 @@ class CreateSnapshotCommand : CommandInterface {
         return "CreateSnapshot"
     }
 
-    override fun generateHelpInfo(): String {
-        return "Create a snapshot for the specified archive. It is expected that the first word in the command option is the archive name, followed by the path to the directory that will be submitted."
+    override fun description(): CommandDescription {
+        return CommandDescription("Create a snapshot for the specified archive.")
+    }
+
+    override fun requiredSettings(): Map<String, String> {
+        return mapOf(
+            "archive" to "Name of archive to create the snapshot for",
+            "path" to "Path of source directory for snapshot"
+        )
+    }
+
+    override fun optionalSettings(): Map<String, String> {
+        return emptyMap()
+    }
+
+    override fun examples(): List<CommandExample> {
+        return listOf(CommandExample("--command createSnapshot --archive archiveName --path ./some/directory/path"))
     }
 }

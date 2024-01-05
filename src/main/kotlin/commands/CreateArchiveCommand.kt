@@ -4,8 +4,9 @@ import ArchiveManager
 
 class CreateArchiveCommand : CommandInterface {
     override fun execute(archiveManager: ArchiveManager, commandOptions: Map<String, String>): CommandResult {
-        require(commandOptions.containsKey("archive")) { "CreateArchive -- missing required option [archive]" }
-        require(commandOptions.containsKey("description")) { "CreateArchive -- missing required option [description]" }
+        requiredSettings().keys.forEach {
+            require(commandOptions.containsKey(it)) {"CreateArchive -- missing required setting [$it]"}
+        }
 
         return try {
             archiveManager.createNewArchive(commandOptions["archive"]!!, commandOptions["description"]!!)
@@ -23,8 +24,24 @@ class CreateArchiveCommand : CommandInterface {
         return "CreateArchive"
     }
 
-    override fun generateHelpInfo(): String {
-        return "Creates a new archive with the given name. If an archive with the same name exists, will fail. \n" +
-                "--command createArchive --archive \"some ArchiveName\" --description \"archive description\""
+    override fun description(): CommandDescription {
+        return CommandDescription("Creates a new archive with the given name. If an archive with the same name exists, will fail.")
+    }
+
+    override fun requiredSettings(): Map<String, String> {
+        return mapOf(
+            "archive" to "The name of the target archive",
+            "description" to "The description of the archive that is to be created"
+        )
+    }
+
+    override fun optionalSettings(): Map<String, String> {
+        return emptyMap()
+    }
+
+    override fun examples(): List<CommandExample> {
+        return listOf(
+            CommandExample("--command createArchive --archive \"some ArchiveName\" --description \"archive description\"")
+        )
     }
 }

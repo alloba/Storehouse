@@ -64,4 +64,9 @@ class MainTests {
         main(arrayOf("--config $runtimeFile --command archiveInfo --archive testArchive"))
         //if this completes assume success
     }
+
+    @Test
+    fun `help message -- manual review`(){
+        main(arrayOf("--help"))
+    }
 }
