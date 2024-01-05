@@ -5,7 +5,7 @@ fun retrieveCommand(commandName: String): CommandInterface {
 }
 
 private val commandMap: Map<String, CommandInterface> =
-    listOf(DisplayArchiveInfoCommand(), UnrecognizedCommand())
+    listOf(CreateArchiveCommand(), CreateSnapshotCommand(), DisplayArchiveInfoCommand(), RestoreFromSnapshotCommand(), UnrecognizedCommand())
         .map { command -> (command.allowedAliases() + command.name()).associateWith { command } }
         .reduce { left, right -> left + right }
 
