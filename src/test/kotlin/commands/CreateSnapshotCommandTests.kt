@@ -14,18 +14,18 @@ class CreateSnapshotCommandTests {
     val harness = TestHarness()
 
     @BeforeEach
-    fun before(){
+    fun before() {
         harness.before()
     }
 
     @AfterEach
-    fun after(){
+    fun after() {
         harness.after()
     }
 
     @Test
-    fun `can create snapshot for existing archive`(){
-        val tempFiles = listOf(1,2,3).map { Path.of(harness.rootTestDirectory.toString() + File.separator + it.toString()) }
+    fun `can create snapshot for existing archive`() {
+        val tempFiles = listOf(1, 2, 3).map { Path.of(harness.rootTestDirectory.toString() + File.separator + it.toString()) }
         tempFiles.forEach { it.writeText(it.toString()) }
 
         val testArchive = harness.archiveManager.createNewArchive("testarchive", "testarchive")

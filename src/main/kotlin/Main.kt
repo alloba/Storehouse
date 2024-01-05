@@ -11,25 +11,25 @@ fun main(args: Array<String>) {
     val logger = LoggerFactory.getLogger("MAIN")
 
     val argStore = ArgsContainer(args)
-    if (argStore.arguments.containsKey("h") || argStore.arguments.containsKey("help")){
+    if (argStore.arguments.containsKey("h") || argStore.arguments.containsKey("help")) {
         println("Help message TODO") //TODO
     }
-    require(argStore.arguments.containsKey("config")) {"Missing required option [config]"}
-    require(argStore.arguments.containsKey("command")) {"Missing required option [command]"}
+    require(argStore.arguments.containsKey("config")) { "Missing required option [config]" }
+    require(argStore.arguments.containsKey("command")) { "Missing required option [command]" }
 
     val runtimeConfiguration = RuntimeConfiguration.fromFilePath(argStore.arguments["config"]!!)
-    val commandName =  argStore.arguments["command"]!!
+    val commandName = argStore.arguments["command"]!!
     val archiveManager = generateArchiveManager(runtimeConfiguration)
 
     val command = commands.retrieveCommand(commandName)
-    if(command is UnrecognizedCommand){
+    if (command is UnrecognizedCommand) {
         logger.error("command $commandName not recognized as valid command. Generating UnrecognizedCommand")
     }
 
     val result = command.execute(archiveManager, argStore.arguments)
 
     println("Operation [${command.name()}]: ${result.success} - ${result.message}")
-    if (! result.success){
+    if (!result.success) {
         throw Exception("Failed to execute command $commandName - ${result.message}")
     }
 }

@@ -13,19 +13,19 @@ class RestoreFromSnapshotTests {
     val harness = TestHarness()
 
     @BeforeEach
-    fun before(){
+    fun before() {
         harness.before()
     }
 
     @AfterEach
-    fun after(){
+    fun after() {
         harness.after()
     }
 
     @Test
-    fun `can restore from snapshot`(){
+    fun `can restore from snapshot`() {
         val sourceDir = createTempDirectory(harness.rootTestDirectory, "restoretest")
-        val sourceFiles = listOf(1,2,3).map { kotlin.io.path.createTempFile(sourceDir, "testFile_$it") }
+        val sourceFiles = listOf(1, 2, 3).map { kotlin.io.path.createTempFile(sourceDir, "testFile_$it") }
         sourceFiles.forEach { it.writeText(it.toString()) }
 
         val archive = harness.archiveManager.createNewArchive("testarchive", "test")

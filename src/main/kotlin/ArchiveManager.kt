@@ -10,7 +10,6 @@ import database.repo.SnapshotRepository
 import destination.ArchiveDestination
 import org.slf4j.LoggerFactory
 import source.ArchiveSource
-import java.io.OutputStream
 import java.nio.file.Path
 import java.time.OffsetDateTime
 import java.util.*
@@ -33,7 +32,7 @@ class ArchiveManager(
     private val fileMetaRepository = FileMetaRepository(database)
 
     fun createNewArchive(archiveName: String, archiveDescription: String): ArchiveEntity {
-        require(archiveRepository.getArchiveEntityByName(archiveName) == null) {"Archive $archiveName already exists. Cannot create."}
+        require(archiveRepository.getArchiveEntityByName(archiveName) == null) { "Archive $archiveName already exists. Cannot create." }
 
         logger.info("Creating new archive with name: $archiveName")
         return archiveRepository.insertArchiveEntity(
@@ -48,7 +47,7 @@ class ArchiveManager(
     }
 
     fun createNewSnapshot(archive: ArchiveEntity, rootPath: Path, description: String = ""): SnapshotEntity {
-        require(rootPath.isDirectory() ){"Path submitted for snapshots must be a directory. Archive: ${archive.name}"}
+        require(rootPath.isDirectory()) { "Path submitted for snapshots must be a directory. Archive: ${archive.name}" }
         val snapshotEntity = snapshotRepository.insertSnapshotEntity(SnapshotEntity(UUID.randomUUID().toString(), OffsetDateTime.now(), OffsetDateTime.now(), description, archive.id))
         val sourceFiles = rootPath.toFile()
             .walkTopDown()
@@ -80,10 +79,10 @@ class ArchiveManager(
     }
 
     fun getFilesBySnapshotId(snapshotId: String): List<FileEntity> {
-        require(snapshotRepository.getSnapshotEntity(snapshotId) != null) {"Snapshot ID not found in Storehouse [$snapshotId]"}
+        require(snapshotRepository.getSnapshotEntity(snapshotId) != null) { "Snapshot ID not found in Storehouse [$snapshotId]" }
         val files = fileMetaRepository.getFileMetasBySnapshotId(snapshotId).map { fileRepository.getFileEntityById(it.fileId) }
 
-        if (files.any{false}){
+        if (files.any { false }) {
             throw Exception("Snapshot [$snapshotId] contains FileMetas with references to Files that do not exist.")
         }
         return files.map { it!! }
@@ -91,11 +90,11 @@ class ArchiveManager(
 
     fun restoreFromSnapshot(snapshotId: String, destinationPath: Path) {
         require(snapshotRepository.getSnapshotEntity(snapshotId) != null) { "Snapshot ID not found in Storehouse [$snapshotId]" }
-        require(destinationPath.isDirectory()) {"Must provide valid directory for snapshot restore. Destination [$destinationPath] doesn't qualify."}
+        require(destinationPath.isDirectory()) { "Must provide valid directory for snapshot restore. Destination [$destinationPath] doesn't qualify." }
         val filesEntities = getFilesBySnapshotId(snapshotId)
         val filePaths = filesEntities.map { destination.retrieveFileByHash(it.md5Hash) }
 
-        if (filePaths.any { false }){
+        if (filePaths.any { false }) {
             throw Exception("Snapshot [$snapshotId] refers to files that could not be found in Storehouse! This is a big problem!")
         }
 

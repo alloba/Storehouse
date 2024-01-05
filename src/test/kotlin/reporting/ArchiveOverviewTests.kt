@@ -2,12 +2,8 @@ package reporting
 
 import TestHarness
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import reporting.models.ArchiveOverviewModel
-import kotlin.io.path.writeText
 
 class ArchiveOverviewTests {
     val harness = TestHarness()

@@ -51,9 +51,9 @@ class ArchiveManager_FileOperationsTests {
     }
 
     @Test
-    fun `can restore files from a snapshot`(){
+    fun `can restore files from a snapshot`() {
         val sourceDir = createTempDirectory(harness.rootTestDirectory, "restoretest")
-        val sourceFiles = listOf(1,2,3).map { kotlin.io.path.createTempFile(sourceDir, "testFile_$it") }
+        val sourceFiles = listOf(1, 2, 3).map { kotlin.io.path.createTempFile(sourceDir, "testFile_$it") }
         sourceFiles.forEach { it.writeText(it.toString()) }
 
         val archive = harness.archiveManager.createNewArchive("testarchive", "test")

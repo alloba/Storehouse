@@ -12,8 +12,9 @@ class MainTests {
     val harness = TestHarness()
 
     var runtimeFile = Path.of("")
+
     @BeforeEach
-    fun before(){
+    fun before() {
         harness.before()
         runtimeFile = kotlin.io.path.createTempFile(harness.rootTestDirectory, "config.json")
 
@@ -31,15 +32,18 @@ class MainTests {
     }
 
     @AfterEach
-    fun after(){
+    fun after() {
         harness.after()
     }
 
-    @Test fun `can create new archive`(){
+    @Test
+    fun `can create new archive`() {
         main(arrayOf("--config $runtimeFile --command createArchive --archive", "testArchive --description aDesc"))
         assertTrue(harness.archiveManager.getArchiveByName("testArchive").name == "testArchive")
     }
-    @Test fun `can create new snapshot`(){
+
+    @Test
+    fun `can create new snapshot`() {
         val targetDir = createTempDirectory(harness.rootTestDirectory, "snapshotdir")
         val targetFile = kotlin.io.path.createTempFile(targetDir, "targetFile")
         targetFile.writeText("asdf")
@@ -48,7 +52,9 @@ class MainTests {
         main(arrayOf("--config $runtimeFile --command createSnapshot --archive testArchive --path $targetDir"))
         assertTrue(harness.archiveManager.getSnapshotsByArchive(archive).size == 1)
     }
-    @Test fun `can display archive information`(){
+
+    @Test
+    fun `can display archive information`() {
         val targetDir = createTempDirectory(harness.rootTestDirectory, "snapshotdir")
         val targetFile = kotlin.io.path.createTempFile(targetDir, "targetFile")
         targetFile.writeText("asdf")
