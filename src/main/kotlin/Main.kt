@@ -1,10 +1,15 @@
 import cli.ArgsContainer
+import commands.UnrecognizedCommand
 import config.RuntimeConfiguration
 import database.StorehouseDatabase
 import destination.local.LocalArchiveDestination
+import org.slf4j.LoggerFactory
 import source.local.LocalArchiveSource
 
 fun main(args: Array<String>) {
+
+    val logger = LoggerFactory.getLogger("MAIN")
+
     val argStore = ArgsContainer(args)
     if (argStore.arguments.containsKey("h") || argStore.arguments.containsKey("help")){
         println("Help message TODO") //TODO
@@ -17,9 +22,16 @@ fun main(args: Array<String>) {
     val archiveManager = generateArchiveManager(runtimeConfiguration)
 
     val command = commands.retrieveCommand(commandName)
+    if(command is UnrecognizedCommand){
+        logger.error("command $commandName not recognized as valid command. Generating UnrecognizedCommand")
+    }
+
     val result = command.execute(archiveManager, argStore.arguments)
 
     println("Operation [${command.name()}]: ${result.success} - ${result.message}")
+    if (! result.success){
+        throw Exception("Failed to execute command $commandName - ${result.message}")
+    }
 }
 
 
