@@ -33,6 +33,8 @@ class ArchiveManager(
     private val fileMetaRepository = FileMetaRepository(database)
 
     fun createNewArchive(archiveName: String, archiveDescription: String): ArchiveEntity {
+        require(archiveRepository.getArchiveEntityByName(archiveName) == null) {"Archive $archiveName already exists. Cannot create."}
+
         logger.info("Creating new archive with name: $archiveName")
         return archiveRepository.insertArchiveEntity(
             ArchiveEntity(
