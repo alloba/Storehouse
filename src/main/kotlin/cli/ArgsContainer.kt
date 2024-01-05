@@ -2,14 +2,27 @@ package cli
 
 class ArgsContainer(args: Array<String>) {
     val arguments: Map<String, String>
-    val free: String
 
     init {
-        val res = parse(args)
-        arguments = res.first
-        free = res.second
+        val res = parseSimple(args)
+        arguments = res
     }
 
+    private fun parseSimple(args: Array<String>): Map<String, String> {
+        val sections = args.joinToString(separator = " ").split("--")
+
+        return sections
+            .associate {
+                if (it.contains(" ")){
+                    it.substringBefore(" ").trim() to it.substringAfter(" ").trim()
+                } else {
+                    it.trim() to ""
+                }
+            }
+            .filter { it.key.isNotBlank() }
+    }
+
+    @Deprecated("This is probably more technically correct as an implementation, but it's just too complicated for what I actually need.")
     private fun parse(args: Array<String>): Pair<Map<String, String>, String> {
         if (args.isEmpty()){
             return Pair(emptyMap(), "")
