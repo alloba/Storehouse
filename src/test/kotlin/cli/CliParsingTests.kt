@@ -15,6 +15,11 @@ class CliParsingTests {
     }
 
     @Test
+    fun `can parse empty array`(){
+        assertTrue(ArgsContainer(emptyArray()).arguments.isEmpty())
+    }
+
+    @Test
     fun `can parse long flag with no value`(){
         val input = arrayOf("--long")
         val result = ArgsContainer(input)
