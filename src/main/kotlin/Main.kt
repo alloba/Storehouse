@@ -54,9 +54,13 @@ fun generateArchiveManager(runtimeConfiguration: RuntimeConfiguration): ArchiveM
     return ArchiveManager(database, source, destination)
 }
 
-fun generateHelpMessage(): String = "Storehouse is a simple archive system developed for preserving directory snapshots.\n" + "Commands:\n" +
-        allEnabledCommands
-            .filter { it !is UnrecognizedCommand }.joinToString("\n\n") {
+fun generateHelpMessage(): String =
+    "Storehouse is a simple archive system developed for preserving directory snapshots.\n" +
+    "A command and a configuration file must always be provided. The configuration file contains source/destination config, and the path to the database. \n" +
+    "Refer to RuntimeConfiguration.kt for structure.\n" +
+    "Commands:\n" +
+    allEnabledCommands
+        .filter { it !is UnrecognizedCommand }.joinToString("\n\n") {
 """${it.name()} 
     Description: ${it.description()} 
     Aliases: ${it.allowedAliases()}

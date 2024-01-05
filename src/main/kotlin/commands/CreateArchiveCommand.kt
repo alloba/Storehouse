@@ -41,7 +41,7 @@ class CreateArchiveCommand : CommandInterface {
 
     override fun examples(): List<CommandExample> {
         return listOf(
-            CommandExample("--command createArchive --archive \"some ArchiveName\" --description \"archive description\"")
+            CommandExample("--config ./path/to/config.json --command createArchive --archive \"some ArchiveName\" --description \"archive description\"")
         )
     }
 }

@@ -48,6 +48,6 @@ class CreateSnapshotCommand : CommandInterface {
     }
 
     override fun examples(): List<CommandExample> {
-        return listOf(CommandExample("--command createSnapshot --archive archiveName --path ./some/directory/path"))
+        return listOf(CommandExample("--config ./path/to/config.json --command createSnapshot --archive archiveName --path ./some/directory/path"))
     }
 }

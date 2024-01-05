@@ -52,6 +52,6 @@ class DisplayArchiveInfoCommand : CommandInterface {
     }
 
     override fun examples(): List<CommandExample> {
-        return listOf( CommandExample("--command archiveInfo --archive archiveName") )
+        return listOf( CommandExample("--config ./path/to/config.json --command archiveInfo --archive archiveName") )
     }
 }

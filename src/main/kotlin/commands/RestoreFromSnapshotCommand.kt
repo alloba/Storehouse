@@ -45,7 +45,7 @@ class RestoreFromSnapshotCommand : CommandInterface {
     }
 
     override fun examples(): List<CommandExample> {
-        return listOf(CommandExample("--command restore --snapshot 123-abc-def-456 --destination \"./a/valid/path/\""))
+        return listOf(CommandExample("--config ./path/to/config.json --command restore --snapshot 123-abc-def-456 --destination \"./a/valid/path/\""))
     }
 
 }
