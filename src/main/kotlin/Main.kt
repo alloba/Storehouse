@@ -1,22 +1,25 @@
+import cli.ArgsContainer
 import config.RuntimeConfiguration
 import database.StorehouseDatabase
 import destination.local.LocalArchiveDestination
 import source.local.LocalArchiveSource
 
 fun main(args: Array<String>) {
-    //im just not quite satisfied with the parsing approach here...
+    val argStore = ArgsContainer(args)
+    if (argStore.arguments.containsKey("h") || argStore.arguments.containsKey("help")){
+        println("Help message TODO") //TODO
+    }
+    require(argStore.arguments.containsKey("config")) {"Missing required option [config]"}
+    require(argStore.arguments.containsKey("command")) {"Missing required option [command]"}
 
-//    val argumentStore = cli.parseArguments(args)
-//    val runtimeConfiguration = RuntimeConfiguration.fromFilePath(argumentStore.configFilePath) //in the future a runtime config could be built in another way? all args/remote source
-//    val archiveManager = generateArchiveManager(runtimeConfiguration)
-//
-//    val commandBlock = argumentStore.commandBlock
-//    val commandName = commandBlock.substringBefore(" ")
-//    val commandVal = if (commandBlock.contains(" ")) commandBlock.substringAfter(" ") else ""
+    val runtimeConfiguration = RuntimeConfiguration.fromFilePath(argStore.arguments["config"]!!)
+    val commandName =  argStore.arguments["command"]!!
+    val archiveManager = generateArchiveManager(runtimeConfiguration)
 
-//    val command = commands.retrieveCommand(commandName)
-//
-//    command.execute(archiveManager, commandVal)
+    val command = commands.retrieveCommand(commandName)
+    val result = command.execute(archiveManager, argStore.arguments)
+
+    println("Operation [${command.name()}]: ${result.success} - ${result.message}")
 }
 
 
